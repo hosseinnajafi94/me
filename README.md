@@ -1,5 +1,7 @@
-About
+About Me
 ------------
-**Me** is PHP MVC Framework
+**Me** is a PHP MVC Framework
 
-Me is a modern framework designed to be a solid foundation for your PHP application.
+This is a modern framework designed to be a solid foundation for your PHP application.
+
+Thanks **Yii** to help **Me**
