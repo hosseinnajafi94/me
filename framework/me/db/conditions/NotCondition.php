@@ -1,5 +1,5 @@
 <?php
-namespace yii\db\conditions;
+namespace me\db\conditions;
 use me\db\ConditionInterface;
 class NotCondition implements ConditionInterface {
     private $condition;

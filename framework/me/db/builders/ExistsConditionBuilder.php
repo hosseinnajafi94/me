@@ -1,8 +1,8 @@
 <?php
-namespace yii\db\conditions;
-use yii\db\ExpressionBuilderInterface;
-use yii\db\ExpressionBuilderTrait;
-use yii\db\ExpressionInterface;
+namespace me\db\builders;
+use me\db\ExpressionBuilderInterface;
+use me\db\ExpressionBuilderTrait;
+use me\db\ExpressionInterface;
 class ExistsConditionBuilder implements ExpressionBuilderInterface {
     use ExpressionBuilderTrait;
     public function build(ExpressionInterface $expression, array &$params = []) {

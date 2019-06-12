@@ -1,6 +1,5 @@
 <?php
-namespace yii\db\conditions;
-use yii\base\InvalidArgumentException;
+namespace me\db\conditions;
 class SimpleCondition implements ConditionInterface {
     private $operator;
     private $column;

@@ -1,5 +1,5 @@
 <?php
-namespace yii\db;
+namespace me\db;
 class ExpressionBuilder implements ExpressionBuilderInterface {
     use ExpressionBuilderTrait;
     public function build(ExpressionInterface $expression, array &$params = []) {

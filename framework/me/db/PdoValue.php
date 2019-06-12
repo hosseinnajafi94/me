@@ -1,5 +1,5 @@
 <?php
-namespace yii\db;
+namespace me\db;
 final class PdoValue implements ExpressionInterface {
     private $value;
     private $type;
