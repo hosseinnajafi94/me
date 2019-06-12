@@ -1,5 +1,5 @@
 <?php
 define('ME_DEBUG', true);
-include 'framework/me/Me.php';
-$config = include 'framework/config/web.php';
+include 'app/me/Me.php';
+$config = include 'app/config/web.php';
 (new \me\components\Application($config))->run();
