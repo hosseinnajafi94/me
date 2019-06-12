@@ -1,6 +1,7 @@
 <?php
 namespace me\widgets;
 use Me;
+use me\helpers\ArrayHelper;
 use me\components\Component;
 class Widget extends Component {
     public static $counter      = 0;
@@ -33,7 +34,7 @@ class Widget extends Component {
         }
         return $this->_id;
     }
-    public static function widget() {
-        
+    public static function widget($config = []) {
+        return Me::createObject(ArrayHelper::Extend(['class' => get_called_class()], $config));
     }
 }

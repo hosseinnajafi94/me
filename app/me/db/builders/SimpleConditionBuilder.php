@@ -1,5 +1,5 @@
 <?php
-namespace me\db\conditions;
+namespace me\db\builders;
 use me\db\ExpressionBuilderInterface;
 use me\db\ExpressionBuilderTrait;
 use me\db\ExpressionInterface;

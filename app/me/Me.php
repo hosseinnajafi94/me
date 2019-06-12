@@ -50,9 +50,6 @@ class Me {
         else if (substr($className, 0, 4) == 'app\\') {
             $file = APP_PATH . str_replace(['app\\', '\\'], ['\\', '/'], $className) . '.php';
         }
-        else if (0 === strpos($className, 'PhpParser\\')) {
-            $file = ME_PATH . '/' . str_replace('\\', '/', $className) . '.php';
-        }
         else {
             return;
         }

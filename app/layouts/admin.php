@@ -55,7 +55,7 @@ AdminAsset::register($this);
                 </ul>
                 <div class="container-fluid">
 
-<?php Alert::widget() ?>
+<?= Alert::widget() ?>
 
 <?= $content ?>
 

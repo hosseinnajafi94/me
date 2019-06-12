@@ -1,6 +1,6 @@
 <?php
 namespace me\db\conditions;
-class SimpleCondition implements ConditionInterface {
+class SimpleCondition implements \me\db\ConditionInterface {
     private $operator;
     private $column;
     private $value;
