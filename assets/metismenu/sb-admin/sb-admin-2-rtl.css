@@ -1,0 +1,25 @@
+@media(min-width:768px) {
+    #page-wrapper {
+        position: inherit;
+        margin: 0 250px 0 0;
+        padding: 0 30px;
+        border-right: 1px solid #e7e7e7;
+    }
+}
+.navbar-top-links .dropdown-user {
+    right: auto;
+    left: 0;
+}
+.navbar-top-links li:last-child {
+    margin-left: 15px;
+    margin-right: auto;
+}
+.dropdown-menu {
+    float: right;
+    right: auto;
+    left: 0;
+    text-align: right;
+}
+.sidebar .arrow {
+    float: left;
+}

@@ -1,0 +1,15 @@
+Options -Indexes
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule . index.php
+
+#SetEnvIf Origin "http(s)?://(www\.)?(localhost|mehreganhosting|hosseinnajafi|getgis|gissoft|geofa3d|geofa)?(\.ir)$" AccessControlAllowOrigin=$0
+#Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+#Header set Access-Control-Allow-Origin "localhost"
+Header set X-Content-Type-Options nosniff
+Header merge Vary Origin
+Header set Strict-Transport-Security "max-age=60000; includeSubDomains"
+Header set X-Frame-Options "deny"
+Header set X-Powered-By "Hossein Najafi"
+Header set X-XSS-Protection "1; mode=block"

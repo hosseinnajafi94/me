@@ -1,0 +1,30 @@
+@font-face {font-family: 'iran_sans';src: url('../fonts/IRANSansWeb(FaNum)_UltraLight.eot?#') format('eot'), url('../fonts/IRANSansWeb(FaNum)_UltraLight.woff') format('woff'), url('../fonts/IRANSansWeb(FaNum)_UltraLight.woff2') format('woff2'), url('../fonts/IRANSansWeb(FaNum)_UltraLight.ttf') format('truetype');}
+html , body {height: 100%;width: 100%;}
+body {overflow-x: hidden;overflow-y: scroll;font-family: 'iran_sans' !important;}
+.my-wrapper {min-height: 100%;width: 100%;padding-bottom: 52px;margin-bottom: -52px;}
+a, a:hover, a:focus {text-decoration: none;cursor: pointer;}
+ul {list-style: none;}
+header:after {content: " ";clear: both;display: table;}
+header ul {margin: 0;padding: 0;}
+header ul.left {float: left;}
+header ul.right {float: right;}
+header ul li {display: inline-block;}
+header ul li a {display: inline-block;color: #FFF !important;padding: 8px 5px;display: block;font-weight: bold;}
+.navbar-nav > li {margin-right: 5px;}
+.navbar-nav > li > a {padding: 13px;font-weight: bold;}
+.navbar-brand {height: 46px;padding: 0;}
+.navbar-brand img {height: 40px;}
+.navbar-default {border: none;border-radius: 0;margin: 0;padding: 10px;}
+.dropdown-menu {left: 0;right: auto;float: right;text-align: right;}
+.services {display: block;padding: 5px;margin-bottom: 30px;}
+footer .top-footer {padding-top: 52px;padding-bottom: 52px;}
+footer .top-footer .footer-menu li:before {content: "\f105";font-family: fontawesome;color: #cfcfcf;margin-left: 5px;margin-right: 5px;}
+footer .top-footer .footer-menu li a {color: #cfcfcf;}
+footer .top-footer .footer-menu li a:hover {color: #007db2;}
+footer .site-info {padding: 15px;text-align: center;}
+.page-index, .form-index, .form-details {margin: 0 0 30px 0;}
+.page-index .title, .form-index .title, .form-details .title {margin: 0;padding: 15px 30px;}
+.page-index .desc, .form-index .desc, .form-details .desc {padding: 30px 60px;}
+@media (max-width: 768px) {
+    .page-index .desc {min-height: inherit;}
+}
