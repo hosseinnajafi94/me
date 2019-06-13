@@ -131,9 +131,12 @@ table.table-bordered.dataTable {max-width: calc(100% - 2px) !important;}
 .table-striped > tbody > tr:nth-child(2n+1) > td{background: rgba(0,0,0,0.2);}
 .table-responsive{border: none;}
 */
+.table-responsive{margin-bottom: 15px;}
 
 /* Pagination */
-.pagination {margin-bottom: 0;}
+.pagination {margin: 0;float: right;}
+.pagination:after{content: " ";clear: both;display: block;}
+.pagination li {float: right;}
 div.dataTables_wrapper div.dataTables_paginate {padding: 0;}
 div.dataTables_wrapper div.dataTables_paginate ul.pagination {margin: 0;float: left;}
 .dataTables_wrapper .pagination > li > a, .dataTables_wrapper .pagination > li > span {padding: 4px 10px 1px;}

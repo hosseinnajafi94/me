@@ -8,22 +8,24 @@ class ActiveDataProvider extends Component {
     public $query;
     public $sort       = [];
     public $pagination = ['size' => 10];
+    public $totalCount = 0;
     public $totalPage  = 0;
-    private $page      = 1;
-    private $order;
-    private $limit     = 0;
-    private $offset    = 0;
+    public $page       = 1;
+    public $order;
+    public $limit      = 0;
+    public $offset     = 0;
     public function models() {
-        //$totalCount = $this->query->count('*');
-        $this->page  = intval(get('page', 1)) - 1;
-        $this->order = get('order');
+        $this->totalCount = $this->query->count('*');
+        $this->page       = intval(get('page', 1)) - 1;
+        $this->order      = get('order');
+        $size             = intval($this->pagination['size']);
+        $this->totalPage  = intval(ceil($this->totalCount / $size));
         if (!empty($this->order)) {
             $this->query->order([$this->order => SORT_DESC]);
         }
         else if (!empty($this->sort)) {
             $this->query->order($this->sort);
         }
-        $size         = intval($this->pagination['size']);
         $this->offset = $size * $this->page;
         $this->limit  = $size;
         $this->query->limit($this->limit);

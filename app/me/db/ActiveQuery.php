@@ -62,6 +62,20 @@ class ActiveQuery extends Component {
         $models = $this->populate([$row]);
         return reset($models) ?: null;
     }
+    public function count($field = '*') {
+        return $this->scalar("COUNT($field)");
+    }
+    public function sum($field) {
+        return $this->scalar("SUM($field)");
+    }
+    private function scalar($param) {
+        $t = new static;
+        $t->modelClass = $this->modelClass;
+        $t->db = $this->db;
+        $t->select("$param AS c");
+        $row = $t->createCommand()->queryOne();
+        return $row['c'];
+    }
     /**
      * @return ActiveRecord[]
      */
