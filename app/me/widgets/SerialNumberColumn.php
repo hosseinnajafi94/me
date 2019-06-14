@@ -12,7 +12,7 @@ class SerialNumberColumn extends Column {
     public function title() {
         return '#';
     }
-    public function load(Model $model) {
+    public function value(Model $model) {
         return static::$counter++;
     }
 }

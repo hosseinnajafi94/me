@@ -14,14 +14,17 @@ class ActiveDataProvider extends Component {
     public $order;
     public $limit      = 0;
     public $offset     = 0;
-    public function models() {
-        $this->totalCount = $this->query->count('*');
+    public function init() {
+        parent::init();
+        $this->totalCount = intval($this->query->count('*'));
         $this->page       = intval(get('page', 1)) - 1;
         $this->order      = get('order');
         $size             = intval($this->pagination['size']);
         $this->totalPage  = intval(ceil($this->totalCount / $size));
         if (!empty($this->order)) {
-            $this->query->order([$this->order => SORT_DESC]);
+            $sort  = strpos($this->order, '-') === false ? SORT_ASC : SORT_DESC;
+            $order = trim($this->order, '-');
+            $this->query->order([$order => $sort]);
         }
         else if (!empty($this->sort)) {
             $this->query->order($this->sort);
@@ -30,7 +33,8 @@ class ActiveDataProvider extends Component {
         $this->limit  = $size;
         $this->query->limit($this->limit);
         $this->query->offset($this->offset);
-        // var_dump($this->query->createCommand()->sql);
+    }
+    public function models() {
         return $this->query->all();
     }
 }

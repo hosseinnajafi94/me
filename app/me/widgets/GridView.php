@@ -12,9 +12,17 @@ class GridView extends Widget {
      */
     public $pagination;
     /**
+     * @var string
+     */
+    public $emptyTable      = 'empty';
+    /**
+     * @var string
+     */
+    public $emptyPagination = 'empty';
+    /**
      * @var \me\components\Model[]
      */
-    public $models  = [];
+    public $models          = [];
     /**
      * @var \me\data\ActiveDataProvider
      */
@@ -22,7 +30,7 @@ class GridView extends Widget {
     /**
      * @var Column[]
      */
-    public $columns = [];
+    public $columns         = [];
     /**
      * @var \me\components\Model
      */
@@ -33,27 +41,21 @@ class GridView extends Widget {
         $this->models = $this->data->models();
         foreach ($this->columns as $key => $id) {
             if (is_array($id)) {
-                $config              = ArrayHelper::Extend([
-                            'class' => 'me\widgets\Column',
-                            'temp'  => $this->temp,
-                            'data'  => $this->data,
-                                ], $id);
+                $config              = ArrayHelper::Extend(['class' => 'me\widgets\Column', 'temp' => $this->temp, 'data' => $this->data], $id);
                 $this->columns[$key] = Me::createObject($config);
             }
             else if (is_string($id)) {
-                $this->columns[$key] = Me::createObject([
-                            'class'     => 'me\widgets\Column',
-                            'attribute' => $id,
-                            'temp'      => $this->temp,
-                            'data'      => $this->data,
-                ]);
+                $this->columns[$key] = Me::createObject(['class' => 'me\widgets\Column', 'attribute' => $id, 'temp' => $this->temp, 'data' => $this->data]);
             }
         }
         $this->table      = $this->renderTable();
         $this->pagination = $this->renderPagination();
     }
+    public function __toString() {
+        return $this->table . "<br/>". $this->pagination;
+    }
     protected function renderTable() {
-        $table = '';
+        $table = "\n";
         $table .= '<table class="table table-bordered table-striped">' . "\n";
         $table .= '  <thead>' . "\n";
         $table .= '    <tr>';
@@ -63,23 +65,31 @@ class GridView extends Widget {
         $table .= '</tr>' . "\n";
         $table .= '  </thead>' . "\n";
         $table .= '  <tbody>' . "\n";
-        foreach ($this->models as $model) {
-            $table .= '    <tr>';
-            foreach ($this->columns as $column) {
-                $table .= '<td>' . $column->load($model) . '</td>';
+        if ($this->data->totalCount === 0) {
+            $table .= '    <tr><td colspan="' . count($this->columns) . '">' . $this->emptyTable . '</td></tr>' . "\n";
+        }
+        else {
+            foreach ($this->models as $model) {
+                $table .= '    <tr>';
+                foreach ($this->columns as $column) {
+                    $table .= '<td>' . $column->value($model) . '</td>';
+                }
+                $table .= '</tr>' . "\n";
             }
-            $table .= '</tr>' . "\n";
         }
         $table .= '  </tbody>' . "\n";
-        $table .= '</table>' . "\n";
+        $table .= '</table>' . "\n\n";
         return $table;
     }
     protected function renderPagination() {
-        $page = $this->data->page + 1;
+        if ($this->data->totalCount === 0) {
+            return $this->emptyPagination . "\n";
+        }
+        $page    = $this->data->page + 1;
         $isFirst = $page === 1;
         $isLast  = $page === $this->data->totalPage;
-        $start = $page > 3 ? $page - 3 : 1;
-        $end = $page + 3 > $this->data->totalPage ? $this->data->totalPage : $page + 3;
+        $start   = $page > 3 ? $page - 3 : 1;
+        $end     = $page + 3 > $this->data->totalPage ? $this->data->totalPage : $page + 3;
         if ($end < $this->data->totalPage && $page < 4) {
             $end = $end + 3 - ($page - 1);
             if ($end > $this->data->totalPage) {
@@ -92,7 +102,7 @@ class GridView extends Widget {
                 $start = 1;
             }
         }
-        $pagination = '';
+        $pagination = "\n";
         $pagination .= '<ul class="pagination pagination-sm">';
         $pagination .= '<li' . ($isFirst ? ' class="disabled"' : '') . '><a' . ($isFirst ? '' : ' href="?page=' . ($page - 1) . '"') . '>&laquo;</a></li>';
         for ($index = $start; $index <= $end; $index++) {
@@ -100,6 +110,7 @@ class GridView extends Widget {
         }
         $pagination .= '<li' . ($isLast ? ' class="disabled"' : '') . '><a' . ($isLast ? '' : ' href="?page=' . ($page + 1) . '"') . '>&raquo;</a></li>';
         $pagination .= '</ul><div class="clearfix"></div>';
+        $pagination .= "\n\n";
         return $pagination;
     }
 }

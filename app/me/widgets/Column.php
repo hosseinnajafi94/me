@@ -15,6 +15,10 @@ class Column extends Widget {
      */
     public $data;
     /**
+     * @var \Closure
+     */
+    public $value;
+    /**
      * @return string Title
      */
     public function title() {
@@ -23,7 +27,10 @@ class Column extends Widget {
     /**
      * @return string Value
      */
-    public function load(Model $model) {
+    public function value(Model $model) {
+        if ($this->value instanceof \Closure) {
+            return call_user_func_array($this->value, [$model]);
+        }
         $attribute = $this->attribute;
         return $model->$attribute;
     }

@@ -62,13 +62,22 @@ class ActiveQuery extends Component {
         $models = $this->populate([$row]);
         return reset($models) ?: null;
     }
-    public function count($field = '*') {
+    public function count(string $field = '*') {
         return $this->scalar("COUNT($field)");
     }
-    public function sum($field) {
+    public function sum(string $field) {
         return $this->scalar("SUM($field)");
     }
-    private function scalar($param) {
+    public function min(string $field) {
+        return $this->scalar("MIN($field)");
+    }
+    public function max(string $field) {
+        return $this->scalar("MAX($field)");
+    }
+    public function avg(string $field) {
+        return $this->scalar("AVG($field)");
+    }
+    private function scalar(string $param) {
         $t = new static;
         $t->modelClass = $this->modelClass;
         $t->db = $this->db;
