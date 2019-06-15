@@ -3,6 +3,7 @@ namespace me\components;
 use ReflectionClass;
 use ReflectionProperty;
 class Model extends Component {
+    protected $_attributes = [];
     /**
      * @return array Rules
      */
@@ -53,7 +54,7 @@ class Model extends Component {
      * @return array Attributes Names
      */
     public static function attributes() {
-        $class = new ReflectionClass($this);
+        $class = new ReflectionClass(get_called_class());
         $names = [];
         foreach ($class->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
             if (!$property->isStatic()) {
@@ -61,6 +62,36 @@ class Model extends Component {
             }
         }
         return $names;
+    }
+    /**
+     * @param sreing $name
+     * @return bool
+     */
+    public function hasAttribute(string $name) {
+        return isset($this->_attributes[$name]) || in_array($name, $this->attributes(), true);
+    }
+    /**
+     * 
+     */
+    public function __get($name) {
+        if (isset($this->_attributes[$name])) {
+            return $this->_attributes[$name];
+        }
+        if ($this->hasAttribute($name)) {
+            return null;
+        }
+        return parent::__get($name);
+    }
+    /**
+     * 
+     */
+    public function __set($name, $value) {
+        if ($this->hasAttribute($name)) {
+            $this->_attributes[$name] = $value;
+        }
+        else {
+            parent::__set($name, $value);
+        }
     }
     /**
      * @param array $postParams
@@ -73,11 +104,14 @@ class Model extends Component {
         }
         if (isset($postParams[$formName]) && is_array($postParams[$formName])) {
             $loaded = true;
-            foreach ($postParams[$formName] as $key => $value) {
-                if (!$this->hasAttribute($key)) {
+            $attributes = $this->attributes();
+            foreach ($attributes as $attribute) {
+                if (isset($postParams[$formName][$attribute])) {
+                    $this->$attribute = $postParams[$formName][$attribute];
+                }
+                else {
                     $loaded = false;
                 }
-                $this->_attributes[$key] = $value;
             }
             return $loaded;
         }
@@ -90,6 +124,9 @@ class Model extends Component {
         return false;
     }
     public function getFirstError($attribute) {
+        return null;
+    }
+    public function addError($attribute, $error) {
         return null;
     }
 }

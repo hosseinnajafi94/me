@@ -4,6 +4,7 @@ use Me;
 use me\helpers\Html;
 use me\helpers\ArrayHelper;
 class ActiveForm extends Widget {
+    public static $counter      = 0;
     public static $autoIdPrefix = 'form';
     public $action  = [];
     public $method  = 'post';

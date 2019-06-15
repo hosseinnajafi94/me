@@ -10,7 +10,6 @@ use me\helpers\StringHelper;
 class ActiveRecord extends Model {
     //--------------------------------------------------------------------------
     protected $_oldAttributes;
-    protected $_attributes = [];
     //--------------------------------------------------------------------------
     /**
      * @return string
@@ -122,13 +121,6 @@ class ActiveRecord extends Model {
         return $this->_oldAttributes === null;
     }
     /**
-     * @param sreing $name
-     * @return bool
-     */
-    public function hasAttribute(string $name) {
-        return isset($this->_attributes[$name]) || in_array($name, $this->attributes(), true);
-    }
-    /**
      * @param array $row
      * @return void
      */
@@ -221,6 +213,24 @@ class ActiveRecord extends Model {
         return $query->where($condition);
     }
     //--------------------------------------------------------------------------
+    public function load(array $postParams = [], $formName = null) {
+        if ($formName === null) {
+            $formName = $this->formName();
+        }
+        if (isset($postParams[$formName]) && is_array($postParams[$formName])) {
+            $loaded = true;
+            $attributes = $this->attributes();
+            foreach ($attributes as $attribute) {
+                if (!isset($postParams[$formName][$attribute])) {
+                    $loaded = false;
+                    break;
+                }
+                $this->_attributes[$attribute] = $postParams[$formName][$attribute];
+            }
+            return $loaded;
+        }
+        return false;
+    }
     /**
      * 
      */
@@ -244,5 +254,4 @@ class ActiveRecord extends Model {
             parent::__set($name, $value);
         }
     }
-    //--------------------------------------------------------------------------
 }

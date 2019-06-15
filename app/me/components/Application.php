@@ -14,6 +14,7 @@ use me\exceptions\Exceptions;
  * @property-read Session $session
  * @property-read UrlManager $urlManager
  * @property-read User $user
+ * @property-read Security $security
  */
 class Application extends Component {
     /**
@@ -79,6 +80,9 @@ class Application extends Component {
         ],
         'user'         => [
             'class' => 'me\components\User',
+        ],
+        'security'     => [
+            'class' => 'me\components\Security',
         ],
     ];
     /**
@@ -313,5 +317,11 @@ class Application extends Component {
      */
     public function getUser() {
         return $this->get('user');
+    }
+    /**
+     * @return Security
+     */
+    public function getSecurity() {
+        return $this->get('security');
     }
 }
