@@ -9,15 +9,15 @@ class User extends Component {
     /**
      * @var IdentityInterface
      */
-    private $_identity       = false;
+    private $_identity      = false;
     /**
      * @var string
      */
-    public $identityClass    = 'me\components\Identity';
+    public $identityClass   = 'me\components\Identity';
     /**
      * @var array
      */
-    public $session          = [
+    public $session         = [
         'enable' => true,
         'expire' => 0,
         'names'  => [
@@ -28,11 +28,11 @@ class User extends Component {
     /**
      * @var bool
      */
-    public $enableAutoLogin  = true;
+    public $enableAutoLogin = true;
     /**
      * @var array
      */
-    public $cookie           = [
+    public $cookie          = [
         'names' => [
             'id' => '_me_idntity',
         ]
@@ -158,5 +158,19 @@ class User extends Component {
                 $cookie->set($name, $value, $expire);
             }
         }
+    }
+    // Auth Manager
+    public function getId() {
+        $identity = $this->getIdentity();
+        return $identity === null ? 0 : $identity->getId();
+    }
+    private $_access = [];
+    public function can($permissionName) {
+        if (!isset($this->_access[$permissionName])) {
+            $userId = $this->getId();
+            $authManager = Me::$app->getAuthManager();
+            $this->_access[$permissionName] = $authManager->checkAccess($userId, $permissionName);
+        }
+        return $this->_access[$permissionName];
     }
 }

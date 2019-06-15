@@ -7,14 +7,16 @@ use me\exceptions\Exceptions;
  * @property string $layoutPath
  * 
  * @property-read AssetManager $assetManager
- * @property-read Cookie $cookie
- * @property-read \me\db\Db $db
- * @property-read Request $request
- * @property-read Response $response
- * @property-read Session $session
- * @property-read UrlManager $urlManager
- * @property-read User $user
- * @property-read Security $security
+ * @property-read \me\rbac\AuthManager  $authManager
+ * @property-read Cookie       $cookie
+ * @property-read \me\db\Db    $db
+ * @property-read Request      $request
+ * @property-read Response     $response
+ * @property-read Security     $security
+ * @property-read Session      $session
+ * @property-read UrlManager   $urlManager
+ * @property-read User         $user
+ * @property-read View         $view
  */
 class Application extends Component {
     /**
@@ -60,6 +62,9 @@ class Application extends Component {
         'assetManager' => [
             'class' => 'me\components\AssetManager',
         ],
+        'authManager' => [
+            'class' => 'me\rbac\AuthManager',
+        ],
         'cookie'       => [
             'class' => 'me\components\Cookie',
         ],
@@ -72,6 +77,9 @@ class Application extends Component {
         'response'     => [
             'class' => 'me\components\Response',
         ],
+        'security'     => [
+            'class' => 'me\components\Security',
+        ],
         'session'      => [
             'class' => 'me\components\Session',
         ],
@@ -81,8 +89,8 @@ class Application extends Component {
         'user'         => [
             'class' => 'me\components\User',
         ],
-        'security'     => [
-            'class' => 'me\components\Security',
+        'view'     => [
+            'class' => 'me\components\View',
         ],
     ];
     /**
@@ -277,6 +285,12 @@ class Application extends Component {
         return $this->get('assetManager');
     }
     /**
+     * @return \me\rbac\AuthManager
+     */
+    public function getAuthManager() {
+        return $this->get('authManager');
+    }
+    /**
      * @return Cookie
      */
     public function getCookie() {
@@ -301,6 +315,12 @@ class Application extends Component {
         return $this->get('response');
     }
     /**
+     * @return Security
+     */
+    public function getSecurity() {
+        return $this->get('security');
+    }
+    /**
      * @return Session
      */
     public function getSession() {
@@ -319,9 +339,9 @@ class Application extends Component {
         return $this->get('user');
     }
     /**
-     * @return Security
+     * @return View
      */
-    public function getSecurity() {
-        return $this->get('security');
+    public function getView() {
+        return $this->get('view');
     }
 }

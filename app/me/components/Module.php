@@ -69,7 +69,7 @@ class Module extends Component {
      */
     public function getViewPath() {
         if ($this->_viewPath === null) {
-            $this->_viewPath = $this->basePath
+            $this->_viewPath = $this->getBasePath()
                     . DIRECTORY_SEPARATOR
                     . 'views';
         }
@@ -80,7 +80,7 @@ class Module extends Component {
      */
     private function getTFile() {
         if ($this->_tFile === null) {
-            $this->_tFile = $this->basePath
+            $this->_tFile = $this->getBasePath()
                     . DIRECTORY_SEPARATOR
                     . 'translations'
                     . DIRECTORY_SEPARATOR

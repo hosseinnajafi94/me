@@ -207,7 +207,7 @@ class Controller extends Component {
      */
     private function getViewPath() {
         if ($this->_viewPath === null) {
-            $this->_viewPath = $this->module->viewPath . DIRECTORY_SEPARATOR . $this->id;
+            $this->_viewPath = $this->module->getViewPath() . DIRECTORY_SEPARATOR . $this->id;
         }
         return $this->_viewPath;
     }
