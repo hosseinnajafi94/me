@@ -9,6 +9,10 @@ use ReflectionMethod;
  */
 class Controller extends Component {
     /**
+     * @var array
+     */
+    public $access = [];
+    /**
      * @var string
      */
     public $id;

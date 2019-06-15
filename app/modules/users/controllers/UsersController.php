@@ -5,8 +5,28 @@ use me\data\ActiveDataProvider;
 use app\me\functions\functions;
 use app\modules\users\models\DAL\Users;
 class UsersController extends Controller {
+    public $access = [
+        'class' => 'me\components\Access',
+        'rules' => [
+            [
+                'actions' => ['index', 'detail'],
+                'roles'   => ['userManagment'],
+                'verbs'   => ['GET']
+            ],
+            [
+                'actions' => ['delete'],
+                'roles'   => ['userManagment'],
+                'verbs'   => ['POST']
+            ],
+            [
+                'actions' => ['create', 'update'],
+                'roles'   => ['userManagment'],
+                'verbs'   => ['GET', 'POST']
+            ]
+        ]
+    ];
     public function Index() {
-        $query = Users::find();//->where(['>=', 'id', 10]);
+        $query = Users::find();
         $data  = new ActiveDataProvider([
             'query'      => $query,
             'sort'       => ['id' => SORT_DESC],

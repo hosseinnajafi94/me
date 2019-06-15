@@ -1,14 +1,41 @@
 <?php
 namespace me\components;
+use Me;
 use me\exceptions\NotFound;
 use ReflectionMethod;
 class Action extends Component {
+    /**
+     * @var string
+     */
     public $id;
+    /**
+     * @var Controller
+     */
     public $controller;
+    /**
+     * @var string
+     */
     public $actionMethod;
+    /**
+     * @return bool
+     */
+    public function checkAccess(): bool {
+        if (empty($this->controller->access)) {
+            return true;
+        }
+        /* @var $access Access */
+        $access = Me::createObject($this->controller->access);
+        return $access->allows($this);
+    }
+    /**
+     * 
+     */
     public function run($params) {
+        if (!$this->checkAccess()) {
+            throw new NotFound('Access Denied!');
+        }
         $method = new ReflectionMethod($this->controller, $this->actionMethod);
-        $args = [];
+        $args   = [];
         foreach ($method->getParameters() as $param) {
             /* @var $param \ReflectionParameter */
             if (isset($params[$param->name])) {

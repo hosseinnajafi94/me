@@ -51,25 +51,6 @@ class AuthManager extends Component {
     }
     /**
      * @param int $userId Identity Number
-     * @return Assignment[]
-     */
-    public function getAssignments(int $userId) {
-        if ($userId === 0) {
-            return [];
-        }
-        $rows        = (new ActiveQuery())->from($this->assignmentTable)->where(['user_id' => $userId])->createCommand()->queryAll();
-        $assignments = [];
-        foreach ($rows as $row) {
-            $assignments[] = new Assignment([
-                'id'      => $row['id'],
-                'item_id' => $row['item_id'],
-                'user_id' => $row['user_id'],
-            ]);
-        }
-        return $assignments;
-    }
-    /**
-     * @param int $userId Identity Number
      * @param string $permissionName Permission Name
      * @param array $assignments Assignments
      * @return bool
@@ -79,22 +60,44 @@ class AuthManager extends Component {
         if ($item === null) {
             return false;
         }
-        if (isset($assignments[$item->name])) {
+        if (isset($assignments[$item->id])) {
             return true;
         }
-        $parents = (new ActiveQuery())
+        $parents = (new ActiveQuery(['db' => $this->db]))
                 ->select("$this->itemTable.name")
                 ->from($this->itemChildTable)
                 ->innerJoin($this->itemTable, "$this->itemChildTable.parent_id = $this->itemTable.id")
                 ->where(["$this->itemChildTable.child_id" => $item->id])
-                ->createCommand()
-                ->queryAll();
+                ->createCommand();
+        $parents = $parents->queryAll();
         foreach ($parents as $parent) {
             if ($this->checkAccessRecursive($userId, $parent['name'], $assignments)) {
                 return true;
             }
         }
         return false;
+    }
+    /**
+     * @param int $userId Identity Number
+     * @return Assignment[]
+     */
+    public function getAssignments(int $userId) {
+        if ($userId === 0) {
+            return [];
+        }
+        $rows        = (new ActiveQuery(['db' => $this->db]))
+                        ->from($this->assignmentTable)
+                        ->where(['user_id' => $userId])
+                        ->createCommand()->queryAll();
+        $assignments = [];
+        foreach ($rows as $row) {
+            $assignments[intval($row['item_id'])] = new Assignment([
+                'id'      => $row['id'],
+                'item_id' => $row['item_id'],
+                'user_id' => $row['user_id'],
+            ]);
+        }
+        return $assignments;
     }
     /**
      * @param string $name Item Name
@@ -104,21 +107,15 @@ class AuthManager extends Component {
         if (empty($name)) {
             return null;
         }
-        $row = (new ActiveQuery())->from($this->itemTable)
+        $row = (new ActiveQuery(['db' => $this->db]))
+                ->from($this->itemTable)
                 ->where(['name' => $name])
                 ->createCommand()
                 ->queryOne();
         if (!$row) {
             return null;
         }
-        return $this->populateItem($row);
-    }
-    /**
-     * @param array $row Row Item
-     * @return Item
-     */
-    protected function populateItem($row) {
         $class = $row['type'] == Item::TYPE_PERMISSION ? Permission::class : Role::class;
-        return new $class(['id' => $row['id'], 'name' => $row['name']]);
+        return new $class(['id' => intval($row['id']), 'name' => $row['name']]);
     }
 }

@@ -85,4 +85,35 @@ class Request extends Component {
         }
         return $this->_baseUrl;
     }
+    /**
+     * 
+     */
+    public function getMethod(): string {
+        $method = filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+        if ($method) {
+            return strtoupper($method);
+        }
+        return 'GET';
+    }
+    public function getIsGet(): bool {
+        return $this->getMethod() === 'GET';
+    }
+    public function getIsOptions(): bool {
+        return $this->getMethod() === 'OPTIONS';
+    }
+    public function getIsHead(): bool {
+        return $this->getMethod() === 'HEAD';
+    }
+    public function getIsPost(): bool {
+        return $this->getMethod() === 'POST';
+    }
+    public function getIsDelete(): bool {
+        return $this->getMethod() === 'DELETE';
+    }
+    public function getIsPut(): bool {
+        return $this->getMethod() === 'PUT';
+    }
+    public function getIsPatch(): bool {
+        return $this->getMethod() === 'PATCH';
+    }
 }
