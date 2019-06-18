@@ -4,10 +4,10 @@
         var messages = {};
         $.each(attributes, function (index, options) {
             if (attributeOptions === undefined || attributeOptions.input === options.input) {
-                var $input = $(options.input);
-                var value = $input.val();
+                var attribute = $(options.input);
+                var value = attribute.val();
                 var message = [];
-                options.validate.call(this, $input, value, message, $form);
+                options.validate.call(this, attribute, value, message, $form);
                 messages[index] = message;
             }
         });

@@ -15,6 +15,7 @@ $this->title     = 'Create User';
             <?= $form->field($model, 'username')->textInput() ?>
             <?= $form->field($model, 'password')->passwordInput() ?>
             <?= $form->field($model, 'fullname')->textInput() ?>
+            <?= $form->field($model, 'avatar')->fileInput() ?>
             <div class="box-footer">
                 <?= Html::a('Return', ['index'], ['class' => 'btn btn-sm btn-warning']) ?>
                 <?= Html::submitButton('Save', ['class' => 'btn btn-sm btn-primary']) ?>

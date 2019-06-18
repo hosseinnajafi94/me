@@ -58,7 +58,7 @@ class Validator extends Component {
         }
         return Me::createObject($params);
     }
-    public function validateValue($value): array {
+    public function validateValue(Model $model, string $attribute): array {
         return [];
     }
     public function clientValidateAttribute(Model $model, string $attribute, View $view): string {
@@ -67,7 +67,7 @@ class Validator extends Component {
     public function validateAttributes(Model $model) {
         foreach ($this->attributes as $attribute) {
             if ($this->when === null || call_user_func($this->when, $model, $attribute)) {
-                $result = $this->validateValue($model->$attribute);
+                $result = $this->validateValue($model, $attribute);
                 if (!empty($result)) {
                     list($message, $params) = $result;
                     $this->addError($model, $attribute, $message, $params);

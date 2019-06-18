@@ -17,7 +17,8 @@ class RequiredValidator extends Validator {
             }
         }
     }
-    public function validateValue($value): array {
+    public function validateValue(Model $model, string $attribute): array {
+        $value = $model->$attribute;
         if ($this->requiredValue === null) {
             if ($this->strict && $value !== null || !$this->strict && !$this->isEmpty(is_string($value) ? trim($value) : $value)) {
                 return [];

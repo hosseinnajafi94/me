@@ -34,7 +34,8 @@ class StringValidator extends Validator {
             $this->notEqual = $this->formatMessage('{attribute} should contain {length}');
         }
     }
-    public function validateValue($value): array {
+    public function validateValue(Model $model, string $attribute): array {
+        $value = $model->$attribute;
         if (!is_string($value)) {
             return [$this->message, []];
         }

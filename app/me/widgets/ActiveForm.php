@@ -1,9 +1,9 @@
 <?php
 namespace me\widgets;
 use Me;
+use me\helpers\Json;
 use me\helpers\Html;
 use me\helpers\ArrayHelper;
-use me\components\JsExpression;
 use me\assets\ActiveFormAsset;
 class ActiveForm extends Widget {
     public static $counter      = 0;
@@ -31,11 +31,9 @@ class ActiveForm extends Widget {
         $html    .= Html::beginForm($this->action, $this->method, $this->options) . "\n";
         $html    .= $content;
         $html    .= Html::endForm() . "\n";
-
         if ($this->enableClientScript) {
             $this->registerClientScript();
         }
-
         return $html;
     }
     /**
@@ -53,21 +51,7 @@ class ActiveForm extends Widget {
     public function registerClientScript() {
         $id          = $this->options['id'];
         $options     = json_encode($this->getClientOptions());
-        $expressions = [];
-        $attributes  = [];
-        foreach ($this->attributes as $index => $attribute) {
-            foreach ($attribute as $key => $value) {
-                if ($value instanceof JsExpression) {
-                    $token                           = '!{[exp=' . count($expressions) . ']}!';
-                    $expressions['"' . $token . '"'] = $value->expression;
-                    $attributes[$index][$key]        = $token;
-                }
-                else {
-                    $attributes[$index][$key] = $value;
-                }
-            }
-        }
-        $attributes = strtr(json_encode($attributes), $expressions);
+        $attributes  = Json::encode($this->attributes);
         $view       = $this->getView();
         ActiveFormAsset::register($view);
         $view->registerJs("$('#$id').activeForm($attributes, $options);");
