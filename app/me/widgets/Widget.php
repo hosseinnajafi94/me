@@ -37,4 +37,17 @@ class Widget extends Component {
     public static function widget($config = []) {
         return Me::createObject(ArrayHelper::Extend(['class' => get_called_class()], $config));
     }
+    private $_view;
+    /**
+     * @return \me\components\View
+     */
+    public function getView() {
+        if ($this->_view === null) {
+            $this->_view = Me::$app->getView();
+        }
+        return $this->_view;
+    }
+    public function setView($view) {
+        $this->_view = $view;
+    }
 }

@@ -211,6 +211,12 @@ class Application extends Component {
             return null;
         }
         if (!$this->modules[$id] instanceof Module) {
+            if (is_string($this->modules[$id])) {
+                $this->modules[$id] = ['class' => $this->modules[$id]];
+            }
+            if (!isset($this->modules[$id]['id'])) {
+                $this->modules[$id]['id'] = $id;
+            }
             $this->modules[$id] = Me::createObject($this->modules[$id]);
         }
         return $this->modules[$id];

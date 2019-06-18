@@ -43,4 +43,11 @@ class Component {
         }
         return;
     }
+    /**
+     * @param string $name Method Name
+     * @return bool
+     */
+    public function hasMethod(string $name): bool {
+        return method_exists($this, $name);
+    }
 }

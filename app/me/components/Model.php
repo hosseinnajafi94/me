@@ -2,8 +2,13 @@
 namespace me\components;
 use ReflectionClass;
 use ReflectionProperty;
+use me\validators\Validator;
+use me\validators\RequiredValidator;
 class Model extends Component {
-    protected $_attributes = [];
+    const SCENARIO_DEFAULT   = 'default';
+    private $_scenario = self::SCENARIO_DEFAULT;
+    private $_validators;
+    private $_errors;
     /**
      * @return array Rules
      */
@@ -53,7 +58,7 @@ class Model extends Component {
     /**
      * @return array Attributes Names
      */
-    public static function attributes() {
+    public static function attributes(): array {
         $class = new ReflectionClass(get_called_class());
         $names = [];
         foreach ($class->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
@@ -64,69 +69,255 @@ class Model extends Component {
         return $names;
     }
     /**
-     * @param sreing $name
-     * @return bool
-     */
-    public function hasAttribute(string $name) {
-        return isset($this->_attributes[$name]) || in_array($name, $this->attributes(), true);
-    }
-    /**
-     * 
-     */
-    public function __get($name) {
-        if (isset($this->_attributes[$name])) {
-            return $this->_attributes[$name];
-        }
-        if ($this->hasAttribute($name)) {
-            return null;
-        }
-        return parent::__get($name);
-    }
-    /**
-     * 
-     */
-    public function __set($name, $value) {
-        if ($this->hasAttribute($name)) {
-            $this->_attributes[$name] = $value;
-        }
-        else {
-            parent::__set($name, $value);
-        }
-    }
-    /**
-     * @param array $postParams
+     * @param array $data
      * @param string $formName
      * @return bool
      */
-    public function load(array $postParams = [], $formName = null) {
-        if ($formName === null) {
-            $formName = $this->formName();
+    public function load(array $data = [], string $formName = null): bool {
+        $scope = $formName === null ? $this->formName() : $formName;
+        if ($scope === '' && !empty($data) && is_array($data)) {
+            $this->setAttributes($data);
+            return true;
         }
-        if (isset($postParams[$formName]) && is_array($postParams[$formName])) {
-            $loaded = true;
-            $attributes = $this->attributes();
-            foreach ($attributes as $attribute) {
-                if (isset($postParams[$formName][$attribute])) {
-                    $this->$attribute = $postParams[$formName][$attribute];
-                }
-                else {
-                    $loaded = false;
-                }
-            }
-            return $loaded;
+        elseif (isset($data[$scope]) && is_array($data[$scope])) {
+            $this->setAttributes($data[$scope]);
+            return true;
         }
         return false;
     }
     /**
+     * @param array $values
+     * @return void
+     */
+    public function setAttributes(array $values) {
+        $attributes = array_flip($this->attributes());
+        foreach ($values as $name => $value) {
+            if (isset($attributes[$name])) {
+                $this->$name = $value;
+            }
+        }
+    }
+    /**
+     * @param string $attribute Attribute Name
      * @return bool
      */
-    public function isAttributeRequired($attribute) {
+    public function isAttributeRequired(string $attribute) {
+        foreach ($this->activeValidators($attribute) as $validator) {
+            if ($validator instanceof RequiredValidator && $validator->when === null) {
+                return true;
+            }
+        }
         return false;
     }
-    public function getFirstError($attribute) {
-        return null;
+    /**
+     * 
+     */
+    public function getFirstErrors() {
+        if (empty($this->_errors)) {
+            return [];
+        }
+        $errors = [];
+        foreach ($this->_errors as $name => $es) {
+            if (!empty($es)) {
+                $errors[$name] = reset($es);
+            }
+        }
+        return $errors;
     }
+    /**
+     * Returns the first error of the specified attribute.
+     * @param string $attribute attribute name.
+     * @return string the error message. Null is returned if no error.
+     */
+    public function getFirstError($attribute) {
+        return isset($this->_errors[$attribute]) ? reset($this->_errors[$attribute]) : null;
+    }
+    /**
+     * @param string $attribute Attribute Name
+     * @param string $error Error Message
+     * @return void
+     */
     public function addError($attribute, $error) {
-        return null;
+        $this->_errors[$attribute][] = $error;
+    }
+    /**
+     * @param array $items Items
+     * @return void
+     */
+    public function addErrors(array $items) {
+        foreach ($items as $attribute => $errors) {
+            if (is_array($errors)) {
+                foreach ($errors as $error) {
+                    $this->addError($attribute, $error);
+                }
+            }
+            else {
+                $this->addError($attribute, $errors);
+            }
+        }
+    }
+    /**
+     * @return Validator[] Validators
+     */
+    public function createValidators() {
+        $validators = [];
+        foreach ($this->rules() as $rule) {
+            if ($rule instanceof Validator) {
+                $validators[] = $rule;
+            }
+            elseif (is_array($rule) && isset($rule[0], $rule[1])) {
+                $validator    = Validator::createValidator($rule[1], $this, (array) $rule[0], array_slice($rule, 2));
+                $validators[] = $validator;
+            }
+        }
+        return $validators;
+    }
+    /**
+     * @return Validator[] Validators
+     */
+    public function getValidators() {
+        if ($this->_validators === null) {
+            $this->_validators = $this->createValidators();
+        }
+        return $this->_validators;
+    }
+    /**
+     * @return string
+     */
+    public function getScenario() {
+        return $this->_scenario;
+    }
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setScenario($value) {
+        $this->_scenario = $value;
+    }
+    /**
+     * 
+     */
+    public function scenarios() {
+        $scenarios = [self::SCENARIO_DEFAULT => []];
+        foreach ($this->getValidators() as $validator) {
+            foreach ($validator->on as $scenario) {
+                $scenarios[$scenario] = [];
+            }
+            foreach ($validator->except as $scenario) {
+                $scenarios[$scenario] = [];
+            }
+        }
+        $names = array_keys($scenarios);
+        foreach ($this->getValidators() as $validator) {
+            if (empty($validator->on) && empty($validator->except)) {
+                foreach ($names as $name) {
+                    foreach ($validator->attributes as $attribute) {
+                        $scenarios[$name][$attribute] = true;
+                    }
+                }
+            }
+            elseif (empty($validator->on)) {
+                foreach ($names as $name) {
+                    if (!in_array($name, $validator->except, true)) {
+                        foreach ($validator->attributes as $attribute) {
+                            $scenarios[$name][$attribute] = true;
+                        }
+                    }
+                }
+            }
+            else {
+                foreach ($validator->on as $name) {
+                    foreach ($validator->attributes as $attribute) {
+                        $scenarios[$name][$attribute] = true;
+                    }
+                }
+            }
+        }
+        foreach ($scenarios as $scenario => $attributes) {
+            if (!empty($attributes)) {
+                $scenarios[$scenario] = array_keys($attributes);
+            }
+        }
+        return $scenarios;
+    }
+    /**
+     * 
+     */
+    public function activeAttributes() {
+        $scenario  = $this->getScenario();
+        $scenarios = $this->scenarios();
+        if (!isset($scenarios[$scenario])) {
+            return [];
+        }
+        $attributes = array_keys(array_flip($scenarios[$scenario]));
+        foreach ($attributes as $i => $attribute) {
+            if ($attribute[0] === '!') {
+                $attributes[$i] = substr($attribute, 1);
+            }
+        }
+        return $attributes;
+    }
+    /**
+     * 
+     */
+    public function activeValidators($attribute = null) {
+        $activeAttributes = $this->activeAttributes();
+        if ($attribute !== null && !in_array($attribute, $activeAttributes, true)) {
+            return [];
+        }
+        $scenario   = $this->getScenario();
+        $validators = [];
+        foreach ($this->getValidators() as $validator) {
+            if ($attribute === null) {
+                $validatorAttributes = $validator->getValidationAttributes($activeAttributes);
+                $attributeValid      = !empty($validatorAttributes);
+            }
+            else {
+                $attributeValid = in_array($attribute, $validator->getValidationAttributes($attribute), true);
+            }
+            if ($attributeValid && $validator->isActive($scenario)) {
+                $validators[] = $validator;
+            }
+        }
+        return $validators;
+    }
+    /**
+     * 
+     */
+    public function clearErrors($attribute = null) {
+        if ($attribute === null) {
+            $this->_errors = [];
+        }
+        else {
+            unset($this->_errors[$attribute]);
+        }
+    }
+    /**
+     * 
+     */
+    public function hasErrors($attribute = null) {
+        return $attribute === null ? !empty($this->_errors) : isset($this->_errors[$attribute]);
+    }
+    /**
+     * 
+     */
+    public function validate($attributeNames = null, $clearErrors = true) {
+        if ($clearErrors) {
+            $this->clearErrors();
+        }
+        $scenarios = $this->scenarios();
+        $scenario  = $this->getScenario();
+        if (!isset($scenarios[$scenario])) {
+            return false;
+            //throw new InvalidArgumentException("Unknown scenario: $scenario");
+        }
+        if ($attributeNames === null) {
+            $attributeNames = $this->activeAttributes();
+        }
+        $attributeNames = (array) $attributeNames;
+        foreach ($this->activeValidators() as $validator) {
+            $validator->validateAttributes($this, $attributeNames);
+        }
+        return !$this->hasErrors();
     }
 }

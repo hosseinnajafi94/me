@@ -1,8 +1,9 @@
 <?php
 use me\helpers\Html;
 use me\widgets\ActiveForm;
-/* @var $this me\components\Controller */
-/* @var $form ActiveForm */
+/* @var $this  me\components\Controller */
+/* @var $form  me\widgets\ActiveForm */
+/* @var $model app\modules\users\models\DAL\Users */
 $this->title     = 'Update User';
 ?>
 <div id="users-users-create">

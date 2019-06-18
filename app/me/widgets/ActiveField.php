@@ -3,6 +3,7 @@ namespace me\widgets;
 use me\helpers\Html;
 use me\helpers\ArrayHelper;
 use me\components\Component;
+use me\components\JsExpression;
 class ActiveField extends Component {
     /**
      * @var \me\components\Model
@@ -50,6 +51,10 @@ class ActiveField extends Component {
     public function __toString() {
         return $this->render();
     }
+    /**
+     * @param string $content
+     * @return string
+     */
     protected function render(string $content = null) {
         if ($content === null) {
             if (!isset($this->parts['{label}'])) {
@@ -68,7 +73,14 @@ class ActiveField extends Component {
         }
         return $this->begin() . $content . $this->end() . "\n";
     }
+    /**
+     * @return string
+     */
     protected function begin() {
+        $clientOptions = $this->getClientOptions();
+        if (!empty($clientOptions)) {
+            $this->form->attributes[] = $clientOptions;
+        }
         $inputID = Html::getInputId($this->model, $this->attribute);
         $options = $this->options;
         $class   = isset($options['class']) ? (array) $options['class'] : [];
@@ -76,13 +88,24 @@ class ActiveField extends Component {
         if ($this->model->isAttributeRequired($this->attribute)) {
             $class[] = $this->form->requiredCssClass;
         }
+        if ($this->model->hasErrors($this->attribute)) {
+            $class[] = $this->form->errorCssClass;
+        }
         $options['class'] = implode(' ', $class);
         return '<div' . Html::optionToAttr($options) . '>';
     }
+    /**
+     * @return string
+     */
     protected function end() {
         return '</div>';
     }
-    public function label(string $label = null, array $options = []) {
+    /**
+     * @param string $label
+     * @param array $options
+     * @return self
+     */
+    public function label(string $label = null, array $options = []): self {
         if ($label === false) {
             $this->parts['{label}'] = '';
             return $this;
@@ -94,7 +117,12 @@ class ActiveField extends Component {
         $this->parts['{label}'] = Html::activeLabel($this->model, $this->attribute, $options);
         return $this;
     }
-    public function hint(string $content = null, array $options = []) {
+    /**
+     * @param string $content
+     * @param array $options
+     * @return self
+     */
+    public function hint(string $content = null, array $options = []): self {
         if ($content === false) {
             $this->parts['{hint}'] = '';
             return $this;
@@ -106,7 +134,11 @@ class ActiveField extends Component {
         $this->parts['{hint}'] = Html::activeHint($this->model, $this->attribute, $options);
         return $this;
     }
-    public function error(array $options = []) {
+    /**
+     * @param array $options
+     * @return self
+     */
+    public function error(array $options = []): self {
         if ($options === false) {
             $this->parts['{error}'] = '';
             return $this;
@@ -115,48 +147,125 @@ class ActiveField extends Component {
         $this->parts['{error}'] = Html::error($this->model, $this->attribute, $options);
         return $this;
     }
-    public function textInput(array $options = []) {
+    /**
+     * @param array $options
+     * @return self
+     */
+    public function textInput(array $options = []): self {
         $options                = ArrayHelper::Extend($this->inputOptions, $options);
         $this->parts['{input}'] = Html::activeTextInput($this->model, $this->attribute, $options);
         return $this;
     }
-    public function passwordInput(array $options = []) {
+    /**
+     * @param array $options
+     * @return self
+     */
+    public function passwordInput(array $options = []): self {
         $options                = ArrayHelper::Extend($this->inputOptions, $options);
         $this->parts['{input}'] = Html::activePasswordInput($this->model, $this->attribute, $options);
         return $this;
     }
-    public function fileInput(array $options = []) {
-        $this->parts['{input}'] = Html::activeFileInput($this->model, $this->attribute, $options);
+    /**
+     * @param array $options
+     * @return self
+     */
+    public function fileInput(array $options = []): self {
+        $this->form->options['enctype'] = 'multipart/form-data';
+        $this->parts['{input}']         = Html::activeFileInput($this->model, $this->attribute, $options);
         return $this;
     }
-    public function radioInput(array $options = []) {
+    /**
+     * @param array $options
+     * @return self
+     */
+    public function radioInput(array $options = []): self {
         $this->parts['{input}'] = Html::activeRadioInput($this->model, $this->attribute, $options);
         return $this;
     }
-    public function checkboxInput(array $options = []) {
+    /**
+     * @param array $options
+     * @return self
+     */
+    public function checkboxInput(array $options = []): self {
         $this->parts['{input}'] = Html::activeCheckboxInput($this->model, $this->attribute, $options);
         return $this;
     }
-    public function colorInput(array $options = []) {
+    /**
+     * @param array $options
+     * @return self
+     */
+    public function colorInput(array $options = []): self {
         $this->parts['{input}'] = Html::activeColorInput($this->model, $this->attribute, $options);
         return $this;
     }
-    public function dropDownListInput(array $items = [], array $options = []) {
+    /**
+     * @param array $items
+     * @param array $options
+     * @return self
+     */
+    public function dropDownListInput(array $items = [], array $options = []): self {
         $options                = ArrayHelper::Extend($this->inputOptions, ['prompt' => 'لطفا انتخاب کنید'], $options);
         $this->parts['{input}'] = Html::activeDropDownList($this->model, $this->attribute, $items, $options);
         return $this;
     }
-    public function listBoxInput(array $items = [], array $options = []) {
+    /**
+     * @param array $items
+     * @param array $options
+     * @return self
+     */
+    public function listBoxInput(array $items = [], array $options = []): self {
         $options                = ArrayHelper::Extend($this->inputOptions, $options);
         $this->parts['{input}'] = Html::activeListBox($this->model, $this->attribute, $items, $options);
         return $this;
     }
-    public function checkboxListInput(array $items = [], array $options = []) {
+    /**
+     * @param array $items
+     * @param array $options
+     * @return self
+     */
+    public function checkboxListInput(array $items = [], array $options = []): self {
         $this->parts['{input}'] = Html::activeCheckboxList($this->model, $this->attribute, $items, $options);
         return $this;
     }
-    public function radioListInput(array $items = [], array $options = []) {
+    /**
+     * @param array $items
+     * @param array $options
+     * @return self
+     */
+    public function radioListInput(array $items = [], array $options = []): self {
         $this->parts['{input}'] = Html::activeRadioList($this->model, $this->attribute, $items, $options);
         return $this;
+    }
+    /**
+     * @return array
+     */
+    public function getClientOptions(): array {
+        $attribute = $this->attribute;
+        if (!in_array($attribute, $this->model->activeAttributes(), true)) {
+            return [];
+        }
+        $validators = [];
+        foreach ($this->model->activeValidators($attribute) as $validator) {
+            /* @var $validator \me\validators\Validator */
+            $js = $validator->clientValidateAttribute($this->model, $attribute, $this->form->getView());
+            if ($validator->enableClientValidation && $js) {
+                if ($validator->whenClient !== null) {
+                    $js = "if (({$validator->whenClient})(attribute, value)) { $js }";
+                }
+                $validators[] = $js;
+            }
+        }
+        if (empty($validators)) {
+            return [];
+        }
+        $inputID = Html::getInputId($this->model, $this->attribute);
+        $options              = [];
+        $options['name']      = $attribute;
+        $options['container'] = ".field-$inputID";
+        $options['input']     = "#$inputID";
+        if (!empty($validators)) {
+            $options['validate'] = new JsExpression('function (attribute, value, messages, deferred, $form) {' . implode('', $validators) . '}');
+        }
+        return $options;
     }
 }

@@ -10,6 +10,7 @@ class AdminAsset extends AssetBundle {
         'js/functions.js',
     ];
     public $depends = [
+        'me\assets\MeAsset',
         'me\assets\JqueryAsset',
         'me\assets\BootstrapAsset',
         'me\assets\MetisMenuAsset',

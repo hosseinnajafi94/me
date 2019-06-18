@@ -8,11 +8,11 @@ class AssetBundle extends Component {
     public $css     = [];
     public $depends = [];
     /**
-     * @param Controller $controller
+     * @param View $view
      * @return void
      */
-    public static function register(Controller $controller) {
-        return $controller->registerAssetBundle(get_called_class());
+    public static function register(View $view) {
+        return $view->registerAssetBundle(get_called_class());
     }
     public function publish() {
         

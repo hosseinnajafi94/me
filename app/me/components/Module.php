@@ -76,9 +76,16 @@ class Module extends Component {
         return $this->_viewPath;
     }
     /**
+     * @param string $file
+     * @return void
+     */
+    public function setTFile(string $file) {
+        $this->_tFile = $file;
+    }
+    /**
      * @return string
      */
-    private function getTFile() {
+    public function getTFile() {
         if ($this->_tFile === null) {
             $this->_tFile = $this->getBasePath()
                     . DIRECTORY_SEPARATOR
