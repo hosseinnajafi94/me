@@ -20,31 +20,32 @@ class ActiveField extends Component {
     /**
      * @var array
      */
-    public $options      = ['class' => 'form-group'];
+    public $options                = ['class' => 'form-group'];
     /**
      * @var string
      */
-    public $template     = "{label}{input}{hint}{error}";
+    public $template               = "{label}{input}{hint}{error}";
     /**
      * @var array
      */
-    public $labelOptions = ['class' => 'control-label'];
+    public $labelOptions           = ['class' => 'control-label'];
     /**
      * @var array
      */
-    public $inputOptions = ['class' => 'form-control input-sm'];
+    public $inputOptions           = ['class' => 'form-control input-sm'];
     /**
      * @var array
      */
-    public $hintOptions  = ['class' => 'hint-block'];
+    public $hintOptions            = ['class' => 'hint-block'];
     /**
      * @var array
      */
-    public $errorOptions = ['class' => 'help-block'];
+    public $errorOptions           = ['class' => 'help-block'];
     /**
      * @var array
      */
-    public $parts        = [];
+    public $parts                  = [];
+    public $enableClientValidation = true;
     /**
      * 
      */
@@ -240,6 +241,9 @@ class ActiveField extends Component {
      * @return array
      */
     public function getClientOptions(): array {
+        if ($this->enableClientValidation === false) {
+            return [];
+        }
         $attribute = $this->attribute;
         if (!in_array($attribute, $this->model->activeAttributes(), true)) {
             return [];
@@ -247,18 +251,17 @@ class ActiveField extends Component {
         $validators = [];
         foreach ($this->model->activeValidators($attribute) as $validator) {
             /* @var $validator \me\validators\Validator */
-            $js = $validator->clientValidateAttribute($this->model, $attribute, $this->form->getView());
-            if ($validator->enableClientValidation && $js) {
-                if ($validator->whenClient !== null) {
-                    $js = "if (({$validator->whenClient})(attribute, value)) { $js }";
+            if ($validator->enableClientValidation) {
+                $js = $validator->clientValidateAttribute($this->model, $attribute, $this->form->getView());
+                if ($js) {
+                    $validators[] = ($validator->whenClient !== null ? "if (({$validator->whenClient})(attribute, value)) { $js }" : '');
                 }
-                $validators[] = $js;
             }
         }
         if (empty($validators)) {
             return [];
         }
-        $inputID = Html::getInputId($this->model, $this->attribute);
+        $inputID              = Html::getInputId($this->model, $this->attribute);
         $options              = [];
         $options['name']      = $attribute;
         $options['container'] = ".field-$inputID";

@@ -1,34 +1,37 @@
 <?php
 namespace me\validators;
-use Me;
+use me\components\View;
+use me\components\Model;
 use me\assets\ValidationAsset;
 class RequiredValidator extends Validator {
     public $requiredValue;
-    public $strict      = false;
-    public $message;
+    public $strict = false;
     public function init() {
         parent::init();
         if ($this->message === null) {
-            $this->message = $this->requiredValue === null ? Me::t('site', '{attribute} cannot be blank.') : Me::t('site', '{attribute} must be "{requiredValue}".');
-        }
-    }
-    public function validateValue($value) {
-        if ($this->requiredValue === null) {
-            if ($this->strict && $value !== null || !$this->strict && !$this->isEmpty(is_string($value) ? trim($value) : $value)) {
-                return null;
+            if ($this->requiredValue === null) {
+                $this->message = $this->formatMessage('{attribute} cannot be blank.');
+            }
+            else {
+                $this->message = $this->formatMessage('{attribute} must be "{requiredValue}".');
             }
         }
-        elseif (!$this->strict && $value == $this->requiredValue || $this->strict && $value === $this->requiredValue) {
-            return null;
-        }
+    }
+    public function validateValue($value): array {
         if ($this->requiredValue === null) {
+            if ($this->strict && $value !== null || !$this->strict && !$this->isEmpty(is_string($value) ? trim($value) : $value)) {
+                return [];
+            }
             return [$this->message, []];
+        }
+        if (!$this->strict && $value == $this->requiredValue || $this->strict && $value === $this->requiredValue) {
+            return [];
         }
         return [$this->message, ['requiredValue' => $this->requiredValue]];
     }
-    public function clientValidateAttribute($model, $attribute, $view) {
-        $label   = $model->attributeLabel($attribute);
-        $options = [];
+    public function clientValidateAttribute(Model $model, string $attribute, View $view): string {
+        $label              = $model->attributeLabel($attribute);
+        $options            = [];
         $options['message'] = $this->formatMessage($this->message, ['attribute' => $label]);
         if ($this->requiredValue !== null) {
             $options['message']       = $this->formatMessage($options['message'], ['requiredValue' => $this->requiredValue]);

@@ -3,14 +3,16 @@ me.validation = (function ($) {
         isEmpty: function (value) {
             return value === null || value === undefined || ($.isArray(value) && value.length === 0) || value === '';
         },
+        isString: function (value) {
+            return typeof value === 'string' || value instanceof String;
+        },
         addMessage: function (messages, message, value) {
             messages.push(message.replace(/\{value\}/g, value));
         },
         required: function (value, messages, options) {
             var valid = false;
             if (options.requiredValue === undefined) {
-                var isString = typeof value == 'string' || value instanceof String;
-                if (options.strict && value !== undefined || !options.strict && !pub.isEmpty(isString ? $.trim(value) : value)) {
+                if (options.strict && value !== undefined || !options.strict && !pub.isEmpty(pub.isString(value) ? $.trim(value) : value)) {
                     valid = true;
                 }
             } else if (!options.strict && value == options.requiredValue || options.strict && value === options.requiredValue) {
@@ -21,14 +23,11 @@ me.validation = (function ($) {
             }
         },
         string: function (value, messages, options) {
-            if (options.skipOnEmpty && pub.isEmpty(value)) {
-                return;
-            }
-            if (typeof value !== 'string') {
+            if (!pub.isString(value)) {
                 pub.addMessage(messages, options.message, value);
                 return;
             }
-            if (options.is !== undefined && value.length != options.is) {
+            if (options.is !== undefined && value.length !== options.is) {
                 pub.addMessage(messages, options.notEqual, value);
                 return;
             }

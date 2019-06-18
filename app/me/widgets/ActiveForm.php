@@ -58,7 +58,7 @@ class ActiveForm extends Widget {
         foreach ($this->attributes as $index => $attribute) {
             foreach ($attribute as $key => $value) {
                 if ($value instanceof JsExpression) {
-                    $token                           = "!{[exp=" . count($expressions) . ']}!';
+                    $token                           = '!{[exp=' . count($expressions) . ']}!';
                     $expressions['"' . $token . '"'] = $value->expression;
                     $attributes[$index][$key]        = $token;
                 }

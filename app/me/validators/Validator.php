@@ -1,6 +1,7 @@
 <?php
 namespace me\validators;
 use Me;
+use me\components\View;
 use me\components\Model;
 use me\components\Component;
 class Validator extends Component {
@@ -35,13 +36,10 @@ class Validator extends Component {
     public $attributes               = [];
     public $on                       = [];
     public $except                   = [];
-    public $skipOnError              = true;
-    public $skipOnEmpty              = true;
     public $enableClientValidation   = true;
-    public $isEmpty;
     public $when;
     public $whenClient;
-    public static function createValidator(string $name, Model $model, array $attributes = [], array $options = []) {
+    public static function createValidator(Model $model, string $name, array $attributes = [], array $params = []) {
         $params['attributes'] = $attributes;
         if ($name instanceof \Closure || ($model->hasMethod($name) && !isset(static::$builtInValidators[$name]))) {
             $params['class']  = __NAMESPACE__ . '\InlineValidator';
@@ -60,67 +58,48 @@ class Validator extends Component {
         }
         return Me::createObject($params);
     }
-    public function validateAttributes(Model $model, array $attributes = null) {
-        $attributes = $this->getValidationAttributes($attributes);
-        foreach ($attributes as $attribute) {
-            $skip = $this->skipOnError && $model->hasErrors($attribute) || $this->skipOnEmpty && $this->isEmpty($model->$attribute);
-            if (!$skip) {
-                if ($this->when === null || call_user_func($this->when, $model, $attribute)) {
-                    $this->validateAttribute($model, $attribute);
+    public function validateValue($value): array {
+        return [];
+    }
+    public function clientValidateAttribute(Model $model, string $attribute, View $view): string {
+        return '';
+    }
+    public function validateAttributes(Model $model) {
+        foreach ($this->attributes as $attribute) {
+            if ($this->when === null || call_user_func($this->when, $model, $attribute)) {
+                $result = $this->validateValue($model->$attribute);
+                if (!empty($result)) {
+                    list($message, $params) = $result;
+                    $this->addError($model, $attribute, $message, $params);
                 }
             }
         }
     }
-    public function validateAttribute(Model $model, string $attribute) {
-        $result = $this->validateValue($model->$attribute);
-        if (is_array($result) && !empty($result)) {
-            $this->addError($model, $attribute, $result[0], $result[1]);
-        }
-    }
     public function getValidationAttributes($attributes = null) {
         if ($attributes === null) {
-            return $this->getAttributeNames();
+            return $this->attributes;
         }
         if (is_string($attributes)) {
             $attributes = [$attributes];
         }
-        $newAttributes  = [];
-        $attributeNames = $this->getAttributeNames();
+        $newAttributes = [];
         foreach ($attributes as $attribute) {
-            if (in_array($attribute, $attributeNames, true)) {
+            if (in_array($attribute, $this->attributes, true)) {
                 $newAttributes[] = $attribute;
             }
         }
         return $newAttributes;
     }
-    public function getAttributeNames() {
-        return array_map(function ($attribute) {
-            return ltrim($attribute, '!');
-        }, $this->attributes);
-    }
-    public function isActive($scenario) {
+    public function isActive($scenario): bool {
         return !in_array($scenario, $this->except, true) && (empty($this->on) || in_array($scenario, $this->on, true));
     }
-    public function isEmpty($value) {
-        if ($this->isEmpty !== null) {
-            return call_user_func($this->isEmpty, $value);
-        }
+    protected function isEmpty($value): bool {
         return $value === null || $value === [] || $value === '';
     }
-    public function validateValue($value) {
-        return null;
-    }
-    public function formatMessage($message, $params) {
+    protected function formatMessage(string $message, array $params = []): string {
         return Me::t('site', $message, $params);
     }
-    /**
-     * @param Model $model Model
-     * @param string $attribute Attribute Name
-     * @param string $message Message
-     * @param array $params Parameters
-     * @return void
-     */
-    public function addError(Model $model, string $attribute, string $message, array $params = []) {
+    protected function addError(Model $model, string $attribute, string $message, array $params = []) {
         $params['attribute'] = $model->attributeLabel($attribute);
         if (!isset($params['value'])) {
             $value = $model->$attribute;
@@ -135,8 +114,5 @@ class Validator extends Component {
             }
         }
         $model->addError($attribute, $this->formatMessage($message, $params));
-    }
-    public function clientValidateAttribute($model, $attribute, $view) {
-        
     }
 }

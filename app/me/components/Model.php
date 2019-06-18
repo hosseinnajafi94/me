@@ -103,6 +103,7 @@ class Model extends Component {
      */
     public function isAttributeRequired(string $attribute) {
         foreach ($this->activeValidators($attribute) as $validator) {
+            /* @var $validator Validator */
             if ($validator instanceof RequiredValidator && $validator->when === null) {
                 return true;
             }
@@ -166,8 +167,10 @@ class Model extends Component {
                 $validators[] = $rule;
             }
             elseif (is_array($rule) && isset($rule[0], $rule[1])) {
-                $validator    = Validator::createValidator($rule[1], $this, (array) $rule[0], array_slice($rule, 2));
-                $validators[] = $validator;
+                $attributes = (array) $rule[0];
+                $name = $rule[1];
+                $params = array_slice($rule, 2);
+                $validators[] = Validator::createValidator($this, $name, $attributes, $params);
             }
         }
         return $validators;
@@ -200,6 +203,7 @@ class Model extends Component {
     public function scenarios() {
         $scenarios = [self::SCENARIO_DEFAULT => []];
         foreach ($this->getValidators() as $validator) {
+            /* @var $validator Validator */
             foreach ($validator->on as $scenario) {
                 $scenarios[$scenario] = [];
             }
@@ -209,6 +213,7 @@ class Model extends Component {
         }
         $names = array_keys($scenarios);
         foreach ($this->getValidators() as $validator) {
+            /* @var $validator Validator */
             if (empty($validator->on) && empty($validator->except)) {
                 foreach ($names as $name) {
                     foreach ($validator->attributes as $attribute) {
@@ -268,6 +273,7 @@ class Model extends Component {
         $scenario   = $this->getScenario();
         $validators = [];
         foreach ($this->getValidators() as $validator) {
+            /* @var $validator Validator */
             if ($attribute === null) {
                 $validatorAttributes = $validator->getValidationAttributes($activeAttributes);
                 $attributeValid      = !empty($validatorAttributes);
@@ -301,7 +307,7 @@ class Model extends Component {
     /**
      * 
      */
-    public function validate($attributeNames = null, $clearErrors = true) {
+    public function validate(bool $clearErrors = true) {
         if ($clearErrors) {
             $this->clearErrors();
         }
@@ -311,12 +317,9 @@ class Model extends Component {
             return false;
             //throw new InvalidArgumentException("Unknown scenario: $scenario");
         }
-        if ($attributeNames === null) {
-            $attributeNames = $this->activeAttributes();
-        }
-        $attributeNames = (array) $attributeNames;
         foreach ($this->activeValidators() as $validator) {
-            $validator->validateAttributes($this, $attributeNames);
+            /* @var $validator Validator */
+            $validator->validateAttributes($this);
         }
         return !$this->hasErrors();
     }
