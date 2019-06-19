@@ -227,7 +227,7 @@ class Html extends Helper {
     }
     //
     public static function beginForm($action, $method, $options) {
-        $options = ArrayHelper::Extend(['method' => $method, 'action' => $action ? Url::to($action) : ''], $options);
+        $options = ArrayHelper::Extend(['method' => $method, 'action' => $action ? Url::to($action) : null], $options);
         return '<form' . static::optionToAttr($options) . '>';
     }
     public static function endForm() {
@@ -270,7 +270,7 @@ class Html extends Helper {
         $id      = static::getInputId($model, $attribute);
         $name    = static::getInputName($model, $attribute);
         $value   = static::getAttributeValue($model, $attribute);
-        $options = ArrayHelper::Extend(['id' => $id, 'name' => $name, 'value' => $value], $options);
+        $options = ArrayHelper::Extend(['id' => $id, 'name' => $name . (isset($options['multiple']) ? '[]' : ''), 'value' => $value], $options);
         return self::input($type, $options);
     }
     public static function activeTextInput(Model $model, string $attribute, array $options = []): string {

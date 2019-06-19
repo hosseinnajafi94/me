@@ -16,13 +16,13 @@ class NumberValidator extends Validator {
     public function init() {
         parent::init();
         if ($this->message === null) {
-            $this->message = $this->integerOnly ? $this->formatMessage('{attribute} must be an integer.') : $this->formatMessage('{attribute} must be a number.');
+            $this->message = $this->integerOnly ? '{attribute} must be an integer.' : '{attribute} must be a number.';
         }
         if ($this->min !== null && $this->tooSmall === null) {
-            $this->tooSmall = $this->formatMessage('{attribute} must be no less than {min}.');
+            $this->tooSmall = '{attribute} must be no less than {min}.';
         }
         if ($this->max !== null && $this->tooBig === null) {
-            $this->tooBig = $this->formatMessage('{attribute} must be no greater than {max}.');
+            $this->tooBig = '{attribute} must be no greater than {max}.';
         }
     }
     public function validateValue(Model $model, string $attribute): array {

@@ -173,7 +173,7 @@ class ActiveField extends Component {
     public function fileInput(array $options = []): self {
         $this->form->options['enctype'] = 'multipart/form-data';
         /* @var $validator \me\validators\Validator */
-        foreach ($this->model->activeValidators($this->attribute) as $validator) {
+        foreach ($this->model->getValidators($this->attribute) as $validator) {
             if ($validator instanceof \me\validators\FileValidator && ($validator->maxFiles != 1 || $validator->minFiles > 1)) {
                 $options['multiple'] = 'multiple';
                 break;
@@ -256,7 +256,7 @@ class ActiveField extends Component {
             return [];
         }
         $validators = [];
-        foreach ($this->model->activeValidators($attribute) as $validator) {
+        foreach ($this->model->getValidators($attribute) as $validator) {
             /* @var $validator \me\validators\Validator */
             if ($validator->enableClientValidation) {
                 $js = $validator->clientValidateAttribute($this->model, $attribute, $this->form->getView());
@@ -273,9 +273,7 @@ class ActiveField extends Component {
         $options['name']      = $attribute;
         $options['container'] = ".field-$inputID";
         $options['input']     = "#$inputID";
-        if (!empty($validators)) {
-            $options['validate'] = new JsExpression('function (attribute, value, messages, $form) {' . implode('', $validators) . '}');
-        }
+        $options['validate'] = new JsExpression('function (attribute, value, messages, $form) {' . implode('', $validators) . '}');
         return $options;
     }
 }

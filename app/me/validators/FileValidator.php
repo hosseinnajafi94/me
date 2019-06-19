@@ -51,24 +51,23 @@ class FileValidator extends Validator {
     }
     public function validateValue(Model $model, string $attribute): array {
         /* @var $uploader UploadedFile */
+        $value    = $model->$attribute;
+        $model->$attribute = null;
         $multiple = ($this->maxFiles != 1 || $this->minFiles > 1);
-        if ($multiple) {
-            $file = UploadedFile::getFiles($model, $attribute);
-        }
-        else {
-            $file = UploadedFile::getFile($model, $attribute);
-        }
-        $uploader = Me::createObject(['class' => UploadedFile::class, 'file' => $file, 'multiple' => $multiple]);
+        $uploader = Me::createObject(['class' => UploadedFile::class, 'file' => $value, 'multiple' => $multiple]);
         if ($uploader->multiple) {
-            foreach ($uploader->type as $index => $type) {
+            foreach ($uploader->name as $index => $name) {
+                if ($this->isEmpty($name)) {
+                    return [];
+                }
                 if (!empty($this->extensions) && !in_array($uploader->type[$index], $this->extensions, true)) {
-                    return [$this->wrongExtension, 'extensions' => implode(', ', $this->extensions)];
+                    return [$this->wrongExtension, ['extensions' => implode(', ', $this->extensions)]];
                 }
                 elseif ($this->maxSize !== null && $uploader->size[$index] > $this->maxSize) {
-                    return [$this->tooBig, ['file' => $uploader->name[$index], 'limit' => $this->maxSize]];
+                    return [$this->tooBig, ['file' => $name, 'limit' => $this->maxSize]];
                 }
                 elseif ($this->minSize !== null && $uploader->size[$index] < $this->minSize) {
-                    return [$this->tooSmall, ['file' => $uploader->name[$index], 'limit' => $this->minSize]];
+                    return [$this->tooSmall, ['file' => $name, 'limit' => $this->minSize]];
                 }
             }
             $filesCount = count($uploader->name);
@@ -78,9 +77,11 @@ class FileValidator extends Validator {
             if ($this->minFiles && $this->minFiles > $filesCount) {
                 return [$this->tooFew, ['limit' => $this->minFiles]];
             }
-            
         }
         else {
+            if ($this->isEmpty($uploader->name)) {
+                return [];
+            }
             if (!empty($this->extensions) && !in_array($uploader->type, $this->extensions, true)) {
                 return [$this->wrongExtension, ['extensions' => implode(', ', $this->extensions)]];
             }
@@ -92,7 +93,7 @@ class FileValidator extends Validator {
             }
         }
         $model->$attribute = $uploader->save($this->path);
-        return $model->$attribute === null ? [$this->message, []] : [];
+        return $this->required && $model->$attribute === null ? [$this->message, []] : [];
     }
     public function clientValidateAttribute(Model $model, string $attribute, View $view): string {
         $options             = [];

@@ -1,7 +1,7 @@
 <?php
 use me\helpers\Html;
 use me\widgets\GridView;
-/* @var $this me\components\Controller */
+/* @var $this me\components\View */
 /* @var $data me\data\ActiveDataProvider */
 /* @var $grid me\widgets\GridView */
 $this->title = 'Users';

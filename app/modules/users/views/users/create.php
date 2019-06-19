@@ -1,26 +1,8 @@
 <?php
-use me\helpers\Html;
-use me\widgets\ActiveForm;
-/* @var $this  me\components\Controller */
-/* @var $form  me\widgets\ActiveForm */
+/* @var $this me\components\View */
 /* @var $model app\modules\users\models\DAL\Users */
-$this->title     = 'Create User';
+$this->title = 'Create User';
 ?>
-
 <div id="users-users-create">
-    <div id="users-users-form">
-        <div class="box">
-            <?php $form            = ActiveForm::begin(['options' => ['id' => 'test']]) ?>
-            <div class="box-header"><?= $this->title ?></div>
-            <?= $form->field($model, 'username')->textInput() ?>
-            <?= $form->field($model, 'password')->passwordInput() ?>
-            <?= $form->field($model, 'fullname')->textInput() ?>
-            <?= $form->field($model, 'avatar')->fileInput() ?>
-            <div class="box-footer">
-                <?= Html::a('Return', ['index'], ['class' => 'btn btn-sm btn-warning']) ?>
-                <?= Html::submitButton('Save', ['class' => 'btn btn-sm btn-primary']) ?>
-            </div>
-            <?php ActiveForm::end() ?>
-        </div>
-    </div>
+    <?= $this->view('_form', ['model' => $model]) ?>
 </div>

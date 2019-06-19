@@ -9,8 +9,8 @@ use me\helpers\StringHelper;
  */
 class ActiveRecord extends Model {
     //--------------------------------------------------------------------------
-    protected $_oldAttributes;
-    protected $_attributes = [];
+    private $_oldAttributes;
+    private $_attributes = [];
     //--------------------------------------------------------------------------
     /**
      * @return array

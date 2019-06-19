@@ -20,7 +20,7 @@ class Request extends Component {
      */
     private $_baseUrl;
     public function get($name = null, $defaultValue = null) {
-        if (is_null($name)) {
+        if ($name === null) {
             return $_GET;
         }
         if (filter_input(INPUT_GET, $name)) {
@@ -28,12 +28,22 @@ class Request extends Component {
         }
         return $defaultValue;
     }
-    public function post($name, $defaultValue = null) {
-        if (is_null($name)) {
+    public function post($name = null, $defaultValue = null) {
+        if ($name === null) {
             return $_POST;
         }
-        if (filter_input(INPUT_POST, $name)) {
-            return filter_input(INPUT_POST, $name);
+        $value = filter_input(INPUT_POST, $name);
+        if ($value) {
+            return $value;
+        }
+        return $defaultValue;
+    }
+    public function files($name = null, $defaultValue = null) {
+        if ($name === null) {
+            return $_FILES;
+        }
+        if (isset($_FILES[$name])) {
+            return $_FILES[$name];
         }
         return $defaultValue;
     }

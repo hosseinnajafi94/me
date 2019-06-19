@@ -1,7 +1,7 @@
 <?php
 use me\helpers\Html;
 use me\widgets\DetailView;
-/* @var $this  me\components\Controller */
+/* @var $this me\components\View */
 /* @var $model app\modules\users\models\DAL\Users */
 $this->title = $model->fullname;
 ?>

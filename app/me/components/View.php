@@ -26,9 +26,13 @@ class View extends Component {
      */
     private $_viewPath;
     /**
+     * @param string $viewname
+     * @param array $params
      * @return string
      */
-    private $_viewFile;
+    public function view($viewname, $params = []) {
+        return $this->renderFile($this->getViewFile($viewname), $params);
+    }
     /**
      * @param string $_file_
      * @param array $_params_
@@ -82,11 +86,9 @@ class View extends Component {
     /**
      * @return string
      */
-    public function getViewFile() {
-        if ($this->_viewFile === null) {
-            $this->_viewFile = $this->getViewPath() . DIRECTORY_SEPARATOR . Me::$app->module->controller->action->id . '.php';
-        }
-        return $this->_viewFile;
+    public function getViewFile($viewFile = null) {
+        $viewFile = ($viewFile === null ? Me::$app->module->controller->action->id : $viewFile);
+        return $this->getViewPath() . DIRECTORY_SEPARATOR . $viewFile . '.php';
     }
     /**
      * @return string

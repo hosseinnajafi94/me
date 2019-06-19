@@ -22,16 +22,16 @@ class StringValidator extends Validator {
             $this->length = null;
         }
         if ($this->message === null) {
-            $this->message = $this->formatMessage('{attribute} must be a string.');
+            $this->message = '{attribute} must be a string.';
         }
         if ($this->min !== null && $this->tooShort === null) {
-            $this->tooShort = $this->formatMessage('{attribute} should contain at least {min}');
+            $this->tooShort = '{attribute} should contain at least {min}';
         }
         if ($this->max !== null && $this->tooLong === null) {
-            $this->tooLong = $this->formatMessage('{attribute} should contain at most {max}');
+            $this->tooLong = '{attribute} should contain at most {max}';
         }
         if ($this->length !== null && $this->notEqual === null) {
-            $this->notEqual = $this->formatMessage('{attribute} should contain {length}');
+            $this->notEqual = '{attribute} should contain {length}';
         }
     }
     public function validateValue(Model $model, string $attribute): array {

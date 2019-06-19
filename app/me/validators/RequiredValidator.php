@@ -10,10 +10,10 @@ class RequiredValidator extends Validator {
         parent::init();
         if ($this->message === null) {
             if ($this->requiredValue === null) {
-                $this->message = $this->formatMessage('{attribute} cannot be blank.');
+                $this->message = '{attribute} cannot be blank.';
             }
             else {
-                $this->message = $this->formatMessage('{attribute} must be "{requiredValue}".');
+                $this->message = '{attribute} must be "{requiredValue}".';
             }
         }
     }

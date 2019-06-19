@@ -110,6 +110,9 @@ class Me {
 spl_autoload_register(['Me', 'autoload']);
 Me::$container = new me\components\Container();
 //
+function files($name = null, $defaultValue = null) {
+    return Me::$app->request->files($name, $defaultValue);
+}
 function post($name = null, $defaultValue = null) {
     return Me::$app->request->post($name, $defaultValue);
 }

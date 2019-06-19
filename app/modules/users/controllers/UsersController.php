@@ -36,7 +36,7 @@ class UsersController extends Controller {
     }
     public function Create() {
         $model = new Users();
-        if ($model->load(post()) && $model->save()) {
+        if ($model->load(post()) && $model->loadFiles(files()) && $model->save()) {
             return $this->redirect(['detail', 'id' => $model->id]);
         }
         return $this->view(['model' => $model]);
@@ -47,7 +47,7 @@ class UsersController extends Controller {
     }
     public function Update($id) {
         $model = $this->findModel($id);
-        if ($model->load(post()) && $model->save()) {
+        if ($model->load(post()) && $model->loadFiles(files()) && $model->save()) {
             return $this->redirect(['detail', 'id' => $model->id]);
         }
         return $this->view(['model' => $model]);

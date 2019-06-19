@@ -6,31 +6,32 @@ use me\components\Model;
 use me\components\Component;
 class Validator extends Component {
     public static $builtInValidators = [
-        'boolean'  => 'me\validators\BooleanValidator',
-        'captcha'  => 'me\captcha\CaptchaValidator',
-        'compare'  => 'me\validators\CompareValidator',
-//        'date'     => 'me\validators\DateValidator',
+        'required' => ['class' => 'me\validators\RequiredValidator'],
+        'string'   => ['class' => 'me\validators\StringValidator'],
+        'number'   => ['class' => 'me\validators\NumberValidator'],
+        'double'   => ['class' => 'me\validators\NumberValidator'],
+        'integer'  => ['class' => 'me\validators\NumberValidator', 'integerOnly' => true],
+        'file'     => ['class' => 'me\validators\FileValidator'],
+        'inline'   => ['class' => 'me\validators\InlineValidator'],
+//        'boolean'  => ['class' => 'me\validators\BooleanValidator'],
+//        'captcha'  => ['class' => 'me\captcha\CaptchaValidator'],
+//        'compare'  => ['class' => 'me\validators\CompareValidator'],
+//        'date'     => ['class' => 'me\validators\DateValidator'],
 //        'datetime' => ['class' => 'me\validators\DateValidator', 'type' => DateValidator::TYPE_DATETIME],
 //        'time'     => ['class' => 'me\validators\DateValidator', 'type' => DateValidator::TYPE_TIME],
-        'default'  => 'me\validators\DefaultValueValidator',
-        'double'   => 'me\validators\NumberValidator',
-        'each'     => 'me\validators\EachValidator',
-        'email'    => 'me\validators\EmailValidator',
-        'exist'    => 'me\validators\ExistValidator',
-        'file'     => 'me\validators\FileValidator',
-        'filter'   => 'me\validators\FilterValidator',
-        'image'    => 'me\validators\ImageValidator',
-        'in'       => 'me\validators\RangeValidator',
-        'integer'  => ['class' => 'me\validators\NumberValidator', 'integerOnly' => true],
-        'match'    => 'me\validators\RegularExpressionValidator',
-        'number'   => 'me\validators\NumberValidator',
-        'required' => 'me\validators\RequiredValidator',
-        'safe'     => 'me\validators\SafeValidator',
-        'string'   => 'me\validators\StringValidator',
-        'trim'     => ['class' => 'me\validators\FilterValidator', 'filter' => 'trim', 'skipOnArray' => true],
-        'unique'   => 'me\validators\UniqueValidator',
-        'url'      => 'me\validators\UrlValidator',
-        'ip'       => 'me\validators\IpValidator',
+//        'default'  => ['class' => 'me\validators\DefaultValueValidator'],
+//        'each'     => ['class' => 'me\validators\EachValidator'],
+//        'email'    => ['class' => 'me\validators\EmailValidator'],
+//        'exist'    => ['class' => 'me\validators\ExistValidator'],
+//        'filter'   => ['class' => 'me\validators\FilterValidator'],
+//        'image'    => ['class' => 'me\validators\ImageValidator'],
+//        'in'       => ['class' => 'me\validators\RangeValidator'],
+//        'match'    => ['class' => 'me\validators\RegularExpressionValidator'],
+//        'safe'     => ['class' => 'me\validators\SafeValidator'],
+//        'trim'     => ['class' => 'me\validators\FilterValidator', 'filter' => 'trim', 'skipOnArray' => true],
+//        'unique'   => ['class' => 'me\validators\UniqueValidator'],
+//        'url'      => ['class' => 'me\validators\UrlValidator'],
+//        'ip'       => ['class' => 'me\validators\IpValidator'],
     ];
     public $message;
     public $attributes               = [];
@@ -42,7 +43,7 @@ class Validator extends Component {
     public static function createValidator(Model $model, string $name, array $attributes = [], array $params = []) {
         $params['attributes'] = $attributes;
         if ($name instanceof \Closure || ($model->hasMethod($name) && !isset(static::$builtInValidators[$name]))) {
-            $params['class']  = __NAMESPACE__ . '\InlineValidator';
+            $params['class']  = static::$builtInValidators['inline'];
             $params['method'] = $name;
         }
         else {
