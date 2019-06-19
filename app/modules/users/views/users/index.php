@@ -4,7 +4,8 @@ use me\widgets\GridView;
 /* @var $this me\components\View */
 /* @var $data me\data\ActiveDataProvider */
 /* @var $grid me\widgets\GridView */
-$this->title = 'Users';
+$this->title = Me::t('users', 'Users');
+$this->params['breadcrumbs'][] = Me::t('users', 'Users');
 $grid = GridView::widget([
     'data'    => $data,
     'columns' => [
@@ -21,7 +22,7 @@ $grid = GridView::widget([
     <div class="box">
         <div class="box-header"><?= $this->title ?></div>
         <p>
-            <?= Html::a('Create', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
+            <?= Html::a(Me::t('site', 'Create'), ['create'], ['class' => 'btn btn-sm btn-success']) ?>
         </p>
         <div class="table-responsive">
             <?= $grid->table ?>

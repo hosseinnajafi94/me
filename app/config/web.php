@@ -4,8 +4,8 @@ return [
         'urlManager' => [
             'map' => [
                 ''  => 'site/default/index',
-                'login'  => 'users/auth/login',
-                'logout' => 'users/auth/logout',
+                'signin'  => 'users/auth/signin',
+                'signout' => 'users/auth/signout',
             ]
         ],
         'db'         => include 'db.php',

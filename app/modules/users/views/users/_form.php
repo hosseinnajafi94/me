@@ -6,17 +6,21 @@ use me\widgets\ActiveForm;
 /* @var $model app\modules\users\models\DAL\Users */
 ?>
 <div id="users-users-form">
+    <?php $form = ActiveForm::begin() ?>
     <div class="box">
-        <?php $form = ActiveForm::begin() ?>
         <div class="box-header"><?= $this->title ?></div>
-        <?= $form->field($model, 'username')->textInput() ?>
-        <?= $form->field($model, 'password')->passwordInput() ?>
-        <?= $form->field($model, 'fullname')->textInput() ?>
-        <?= $form->field($model, 'avatar')->fileInput() ?>
-        <div class="box-footer">
-            <?= Html::a('Return', ['index'], ['class' => 'btn btn-sm btn-warning']) ?>
-            <?= Html::submitButton('Save', ['class' => 'btn btn-sm btn-primary']) ?>
+        <div class="row">
+            <div class="col-md-4">
+                <?= $form->field($model, 'username')->textInput() ?>
+                <?= $form->field($model, 'password')->passwordInput() ?>
+                <?= $form->field($model, 'fullname')->textInput() ?>
+                <?= $form->field($model, 'avatar')->fileInput() ?>
+            </div>
         </div>
-        <?php ActiveForm::end() ?>
+        <div class="box-footer">
+            <?= Html::a(Me::t('site', 'Return'), ['index'], ['class' => 'btn btn-sm btn-warning']) ?>
+            <?= Html::submitButton(Me::t('site', 'Save'), ['class' => 'btn btn-sm btn-primary']) ?>
+        </div>
     </div>
+    <?php ActiveForm::end() ?>
 </div>

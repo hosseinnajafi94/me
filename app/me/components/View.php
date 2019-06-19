@@ -6,11 +6,15 @@ use me\exceptions\NotFound;
 use me\components\AssetBundle;
 class View extends Component {
     /**
-     * @return array
+     * @var array
+     */
+    public $params = [];
+    /**
+     * @var array
      */
     private $assetBundles = [];
     /**
-     * @return array
+     * @var array
      */
     private $assets       = [];
     /**
@@ -18,7 +22,7 @@ class View extends Component {
      */
     public $title;
     /**
-     * @return string
+     * @var string
      */
     private $_layoutFile;
     /**
