@@ -15,7 +15,7 @@ class Users extends ActiveRecord implements IdentityInterface {
     }
     public function rules() {
         return [
-                [['username', 'password', 'fullname', 'file'], 'required'],
+                [['username', 'password', 'fullname', 'avatar'], 'required'],
                 [['username', 'password', 'fullname'], 'string', 'min' => 6, 'max' => 255],
                 [['avatar'], 'file', 'path' => Me::getAlias('@root/uploads/users'), 'extensions' => 'png, jpg, jpeg'],
         ];
@@ -26,6 +26,7 @@ class Users extends ActiveRecord implements IdentityInterface {
             'username' => Me::t('users', 'Username'),
             'password' => Me::t('users', 'Password'),
             'fullname' => Me::t('users', 'Fullname'),
+            'avatar'   => Me::t('users', 'Avatar'),
         ];
     }
     public function hints() {

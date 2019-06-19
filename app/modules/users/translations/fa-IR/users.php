@@ -5,4 +5,5 @@ return [
     'Username' => 'نام کاربری',
     'Password' => 'رمز عبور',
     'Fullname' => 'نام و نام خانوادگی',
+    'Avatar' => 'آواتار',
 ];
