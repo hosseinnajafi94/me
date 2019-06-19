@@ -12,7 +12,7 @@ $this->title = $model->fullname;
             <?= Html::a('Return', ['index'], ['class' => 'btn btn-sm btn-warning']) ?>
             <?= Html::a('Create', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
             <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']) ?>
-            <?= Html::a('Delete', ['delete', 'id' => $model->id], ['class' => 'btn btn-sm btn-danger']) ?>
+            <?= Html::a('Delete', ['delete', 'id' => $model->id], ['class' => 'btn btn-sm btn-danger', 'data-method' => 'post', 'data-confirm' => Me::t('site', 'Are you sure?')]) ?>
         </p>
         <div class="table-responsive">
             <?= DetailView::widget([

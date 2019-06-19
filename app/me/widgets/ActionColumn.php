@@ -1,5 +1,6 @@
 <?php
 namespace me\widgets;
+use Me;
 use me\helpers\Html;
 use me\components\Model;
 class ActionColumn extends Column {
@@ -22,7 +23,7 @@ class ActionColumn extends Column {
         if (!isset($this->buttons['delete'])) {
             $this->buttons['delete'] = function(Model $model) {
                 /* @var $model Model */
-                return Html::a('<i class="glyphicon glyphicon-trash"></i>', ['delete', 'id' => $model->id]);
+                return Html::a('<i class="glyphicon glyphicon-trash"></i>', ['delete', 'id' => $model->id], ['data-method' => 'post', 'data-confirm' => Me::t('site', 'Are you sure?')]);
             };
         }
     }
