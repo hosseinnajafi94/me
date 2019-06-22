@@ -4,9 +4,9 @@ use me\widgets\ActiveForm;
 /* @var $this me\components\View */
 /* @var $form me\widgets\ActiveForm */
 /* @var $model app\modules\users\models\VML\ProfileUpdateVML */
-$this->title = Me::t('site', 'Update');
+$this->title = Me::t('users', 'Update Profile');
 $this->params['breadcrumbs'][] = ['label' => Me::t('users', 'Profile'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = Me::t('site', 'Update');
+$this->params['breadcrumbs'][] = Me::t('users', 'Update Profile');
 ?>
 <div id="users-profile-update">
     <?php $form = ActiveForm::begin() ?>

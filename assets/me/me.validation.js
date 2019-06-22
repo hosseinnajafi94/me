@@ -51,6 +51,45 @@ me.validation = (function ($) {
                 validateFile(file, messages, options);
             });
         },
+        compare: function (value, messages, options) {
+            var compareValue = $('#' + options.compareAttribute).val().toString();
+            if (options.type === 'number') {
+                value = parseFloat(value) ? parseFloat(value) : 0;
+                compareValue = parseFloat(compareValue) ? parseFloat(compareValue) : 0;
+            }
+
+            var valid = false;
+            switch (options.operator) {
+                case '==':
+                    valid = value == compareValue;
+                    break;
+                case '===':
+                    valid = value === compareValue;
+                    break;
+                case '!=':
+                    valid = value != compareValue;
+                    break;
+                case '!==':
+                    valid = value !== compareValue;
+                    break;
+                case '>':
+                    valid = value > compareValue;
+                    break;
+                case '>=':
+                    valid = value >= compareValue;
+                    break;
+                case '<':
+                    valid = value < compareValue;
+                    break;
+                case '<=':
+                    valid = value <= compareValue;
+                    break;
+            }
+
+            if (!valid) {
+                addMessage(messages, options.message, value);
+            }
+        },
         image: function (attribute, messages, options, deferredList) {
             var files = getUploadedFiles(attribute, messages, options);
             $.each(files, function (i, file) {
@@ -203,57 +242,6 @@ me.validation = (function ($) {
                 h += v.charCodeAt(i);
             }
             if (h != hash) {
-                addMessage(messages, options.message, value);
-            }
-        },
-        compare: function (value, messages, options, $form) {
-            if (options.skipOnEmpty && isEmpty(value)) {
-                return;
-            }
-            var compareValue, valid = true;
-            if (options.compareAttribute === undefined) {
-                compareValue = options.compareValue;
-            } else {
-                var $target = $('#' + options.compareAttribute);
-                if (!$target.length) {
-                    $target = $form.find('[name="' + options.compareAttributeName + '"]');
-                }
-                compareValue = $target.val();
-            }
-            if (options.type === 'number') {
-                value = value ? parseFloat(value) : 0;
-                compareValue = compareValue ? parseFloat(compareValue) : 0;
-            }
-            switch (options.operator) {
-                case '==':
-                    valid = value == compareValue;
-                    break;
-                case '===':
-                    valid = value === compareValue;
-                    break;
-                case '!=':
-                    valid = value != compareValue;
-                    break;
-                case '!==':
-                    valid = value !== compareValue;
-                    break;
-                case '>':
-                    valid = value > compareValue;
-                    break;
-                case '>=':
-                    valid = value >= compareValue;
-                    break;
-                case '<':
-                    valid = value < compareValue;
-                    break;
-                case '<=':
-                    valid = value <= compareValue;
-                    break;
-                default:
-                    valid = false;
-                    break;
-            }
-            if (!valid) {
                 addMessage(messages, options.message, value);
             }
         },

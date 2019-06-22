@@ -118,4 +118,15 @@ class AuthManager extends Component {
         $class = $row['type'] == Item::TYPE_PERMISSION ? Permission::class : Role::class;
         return new $class(['id' => intval($row['id']), 'name' => $row['name']]);
     }
+    /**
+     * @param int $userId User Identity Number
+     * @param int $itemId Item Number
+     * @return bool
+     */
+    public function add(int $userId, int $itemId): bool {
+        $command = Me::$app->getDb()->createCommand();
+        $command->insert($this->assignmentTable, ['item_id' => $itemId, 'user_id' => $userId]);
+        $affectedRows = $command->execute();
+        return $affectedRows > 0;
+    }
 }

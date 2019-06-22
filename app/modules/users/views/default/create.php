@@ -8,7 +8,7 @@ $this->title = Me::t('site', 'Create');
 $this->params['breadcrumbs'][] = ['label' => Me::t('users', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Me::t('site', 'Create');
 ?>
-<div id="users-users-create">
+<div id="users-default-create">
     <div id="users-users-form">
         <?php $form = ActiveForm::begin() ?>
         <div class="box">

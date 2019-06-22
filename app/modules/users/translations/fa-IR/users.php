@@ -13,4 +13,5 @@ return [
     'Old Password'        => 'رمز عبور فعلی',
     'New Password'        => 'رمز عبور جدید',
     'New Password Repeat' => 'تکرار رمز عبور جدید',
+    'Update Profile'      => 'ویرایش پروفایل',
 ];

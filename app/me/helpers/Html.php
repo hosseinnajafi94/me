@@ -210,6 +210,9 @@ class Html extends Helper {
     public static function a(string $text, $url = null, array $options = []): string {
         return '<a' . self::optionToAttr(array_merge(['href' => (is_array($url) ? Url::to($url) : $url)], $options)) . '>' . $text . "</a>\n";
     }
+    public static function img(string $src, array $options = []) {
+        return '<img' . static::optionToAttr(ArrayHelper::Extend($options, ['src' => $src])) . '/>';
+    }
     public static function script(string $text): string {
         return '<script type="text/javascript">' . $text . '</script>';
     }
@@ -238,9 +241,7 @@ class Html extends Helper {
         if ($formName === '') {
             return $attribute;
         }
-        else {
-            return $formName . "[$attribute]";
-        }
+        return $formName . "[$attribute]";
     }
     public static function getInputId(Model $model, string $attribute) {
         $charset = Me::$app ? Me::$app->charset : 'UTF-8';

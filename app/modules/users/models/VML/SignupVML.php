@@ -49,10 +49,12 @@ class SignupVML extends Model {
         $model->username = $this->username;
         $model->password = Me::$app->security->generatePasswordHash($this->password);
         $model->fullname = $this->fullname;
+        $model->avatar   = 'default.png';
         if (!$model->save()) {
             $this->addError('username', 'خطا در ذخیره اطلاعات!');
             return false;
         }
+        Me::$app->getAuthManager()->add($model->id, 2);
         return Me::$app->user->signin($model);
     }
 }

@@ -313,7 +313,7 @@ class Application extends Component {
         return $this->get('cookie');
     }
     /**
-     * @return Db
+     * @return \me\db\Db
      */
     public function getDb() {
         return $this->get('db');

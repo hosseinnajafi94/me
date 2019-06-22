@@ -7,7 +7,7 @@ class Breadcrumbs extends Widget {
         return $this->render();
     }
     public function render() {
-        $li = ['<li><a href="' . Url::to(['site/default/index']) . '">داشبورد</a></li>'];
+        $li = ['<li><a href="' . Url::to(['dashboard/default/index']) . '">داشبورد</a></li>'];
         if (is_array($this->items)) {
             foreach ($this->items as $breadcrumb) {
                 $label = '';

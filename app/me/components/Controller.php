@@ -1,6 +1,7 @@
 <?php
 namespace me\components;
 use Me;
+use me\helpers\Url;
 use me\exceptions\NotFound;
 use ReflectionMethod;
 /**
@@ -85,7 +86,7 @@ class Controller extends Component {
      * 
      */
     public function redirect($url = []) {
-        header('location:' . \me\helpers\Url::to($url));
+        header('location:' . Url::to($url));
         exit;
     }
     /**

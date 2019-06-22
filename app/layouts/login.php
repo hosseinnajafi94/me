@@ -1,7 +1,7 @@
 <?php
 use me\widgets\Alert;
 use app\assets\LoginAsset;
-/* @var $this me\components\Controller */
+/* @var $this me\components\View */
 /* @var $content string */
 LoginAsset::register($this);
 ?>

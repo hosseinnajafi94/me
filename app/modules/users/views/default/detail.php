@@ -7,7 +7,7 @@ $this->title = $model->fullname;
 $this->params['breadcrumbs'][] = ['label' => Me::t('users', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->fullname;
 ?>
-<div id="users-users-index">
+<div id="users-default-detail">
     <div class="box">
         <div class="box-header"><?= $this->title ?></div>
         <p>

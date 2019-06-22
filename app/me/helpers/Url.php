@@ -12,11 +12,15 @@ class Url extends Helper {
         if ($key === false) {
             $items = explode('/', $path);
             if (count($items) === 1) {
-                $path = implode('/', [Me::$app->module->id, Me::$app->module->controller->id, $items[0]]);
+                $items = [Me::$app->module->id, Me::$app->module->controller->id, $items[0]];
             }
-            if (count($items) === 2) {
-                $path = implode('/', [Me::$app->module->id, $items[0], $items[1]]);
+            elseif (count($items) === 2) {
+                $items = [Me::$app->module->id, $items[0], $items[1]];
             }
+            if ($items[1] === 'default' && $items[2] === 'index') {
+                $items = [$items[0]];
+            }
+            $path = implode('/', $items);
         }
         else {
             $path = $key;

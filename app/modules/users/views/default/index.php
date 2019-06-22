@@ -18,7 +18,7 @@ $grid = GridView::widget([
     ]
 ]);
 ?>
-<div id="users-users-index">
+<div id="users-default-index">
     <div class="box">
         <div class="box-header"><?= $this->title ?></div>
         <p>

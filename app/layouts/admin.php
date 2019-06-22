@@ -23,7 +23,7 @@ AdminAsset::register($this);
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/dashboard/default/index">کالج زبان</a>                </div>
+                    <a class="navbar-brand" href="<?= Url::to(['dashboard/default/index']) ?>">کالج زبان</a>                </div>
                 <ul class="nav navbar-top-links navbar-right">
                     <li class="hidden-xs"><a onclick="toggleMenuCookie();"><i class="fa fa-bars"></i></a></li>
                     <li><a style="cursor: default;direction: ltr;">امروز: <?= functions::datestring() ?></a></li>
@@ -37,8 +37,8 @@ AdminAsset::register($this);
             <div class="sidebar <?= (isset($_COOKIE['cls']) ? ' h' : '') ?>" role="navigation">
                 <div class="sidebar-nav navbar-collapse collapse">
                     <ul class="nav" id="side-menu">
-                        <li><a href="<?= Url::to(['site/default/index']) ?>"><i class="fa fa-fw fa-tachometer-alt"></i> داشبورد</a></li>
-                        <li><a href="<?= Url::to(['users/users/index']) ?>"><i class="fa fa-fw fa-users"></i> کاربران</a></li>
+                        <li><a href="<?= Url::to(['dashboard/default/index']) ?>"><i class="fa fa-fw fa-tachometer-alt"></i> داشبورد</a></li>
+                        <?= Me::$app->user->can('userManagment') ? '<li><a href="' . Url::to(['users/default/index']) . '"><i class="fa fa-fw fa-users"></i> کاربران</a></li>' : '' ?>
                     </ul>
                 </div>
             </div>

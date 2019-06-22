@@ -27,7 +27,7 @@ class ProfilePasswordVML extends Model {
         return [
                 [['old_password', 'new_password', 'new_password_repeat'], 'required'],
                 [['old_password', 'new_password', 'new_password_repeat'], 'string', 'min' => 6, 'max' => 255],
-                //[['new_password'], 'compare', 'width' => 'new_password_repeat'],
+                [['new_password_repeat'], 'compare', 'compareAttribute' => 'new_password'],
         ];
     }
     /**

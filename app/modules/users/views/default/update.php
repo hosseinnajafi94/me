@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = ['label' => Me::t('users', 'Users'), 'url' => [
 $this->params['breadcrumbs'][] = ['label' => $model->fullname, 'url' => ['detail', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Me::t('site', 'Update');
 ?>
-<div id="users-users-create">
+<div id="users-default-update">
     <div id="users-users-form">
         <?php $form = ActiveForm::begin() ?>
         <div class="box">

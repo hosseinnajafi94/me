@@ -3,7 +3,7 @@ namespace app\modules\users\controllers;
 use me\components\Controller;
 use app\components\functions;
 use app\modules\users\models\SRL\UsersSRL;
-class UsersController extends Controller {
+class DefaultController extends Controller {
     public $access = [
         'class' => 'me\components\Access',
         'rules' => [
