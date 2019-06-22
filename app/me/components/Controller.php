@@ -28,6 +28,10 @@ class Controller extends Component {
      */
     public $layout;
     /**
+     * @var string
+     */
+    private $_layoutFile;
+    /**
      * @param string $actionID
      * @param array $params
      * @return Response|string
@@ -65,7 +69,7 @@ class Controller extends Component {
     public function view(array $items = []) {
         $view = Me::$app->getView();
         $content = $view->renderFile($view->getViewFile(), $items);
-        return $view->render($content);
+        return $this->render($content);
     }
     /**
      * @param array|object $params
@@ -83,5 +87,40 @@ class Controller extends Component {
     public function redirect($url = []) {
         header('location:' . \me\helpers\Url::to($url));
         exit;
+    }
+    /**
+     * @param string $content
+     * @return string
+     */
+    public function render($content) {
+        $layoutFile = $this->getLayoutFile();
+        if ($layoutFile === false) {
+            return $content;
+        }
+        $view = Me::$app->getView();
+        return $view->renderFile($layoutFile, ['content' => $content]);
+    }
+    /**
+     * @return false|string
+     */
+    public function getLayoutFile() {
+        if ($this->_layoutFile === null) {
+            $layout = false;
+            if (is_string($this->layout)) {
+                $layout = $this->layout;
+            }
+            else if (is_null($this->layout) && !is_null(Me::$app->layout)) {
+                $layout = Me::$app->layout;
+            }
+            if ($layout === false) {
+                $this->_layoutFile = false;
+                return false;
+            }
+            $this->_layoutFile = Me::$app->layoutPath . DIRECTORY_SEPARATOR . $layout . '.php';
+            if (!is_file($this->_layoutFile)) {
+                throw new NotFound("Layout File { <b>$this->_layoutFile</b> } Not Found");
+            }
+        }
+        return $this->_layoutFile;
     }
 }

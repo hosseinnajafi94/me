@@ -24,10 +24,6 @@ class View extends Component {
     /**
      * @var string
      */
-    private $_layoutFile;
-    /**
-     * @var string
-     */
     private $_viewPath;
     /**
      * @param string $viewname
@@ -51,41 +47,6 @@ class View extends Component {
         extract($_params_, EXTR_OVERWRITE);
         require $_file_;
         return ob_get_clean();
-    }
-    /**
-     * @return false|string
-     */
-    public function getLayoutFile() {
-        if ($this->_layoutFile === null) {
-            $layout = false;
-            if (is_string($this->layout)) {
-                $layout = $this->layout;
-            }
-            else if (is_null($this->layout) && !is_null(Me::$app->layout)) {
-                $layout = Me::$app->layout;
-            }
-            if ($layout === false) {
-                $this->_layoutFile = false;
-                return false;
-            }
-            $this->_layoutFile = Me::$app->layoutPath . DIRECTORY_SEPARATOR . $layout . '.php';
-            if (!is_file($this->_layoutFile)) {
-                throw new NotFound("Layout File { <b>$this->_layoutFile</b> } Not Found");
-            }
-        }
-
-        return $this->_layoutFile;
-    }
-    /**
-     * @param string $content
-     * @return string
-     */
-    public function render($content) {
-        $layoutFile = $this->getLayoutFile();
-        if ($layoutFile === false) {
-            return $content;
-        }
-        return $this->renderFile($layoutFile, ['content' => $content]);
     }
     /**
      * @return string

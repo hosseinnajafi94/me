@@ -8,6 +8,7 @@ use me\components\IdentityInterface;
  * @property string $username
  * @property string $password
  * @property string $fullname
+ * @property string $avatar
  */
 class Users extends ActiveRecord implements IdentityInterface {
     public static function tablename() {
@@ -17,7 +18,8 @@ class Users extends ActiveRecord implements IdentityInterface {
         return [
             [['username', 'password', 'fullname', 'avatar'], 'required'],
             [['username', 'password', 'fullname'], 'string', 'min' => 6, 'max' => 255],
-            [['avatar'], 'file', 'path' => Me::getAlias('@root/uploads/users'), 'extensions' => 'png, jpg, jpeg'],
+            [['avatar'], 'string', 'max' => 255],
+            //[['avatar'], 'file', 'path' => Me::getAlias('@root/uploads/users'), 'extensions' => 'png, jpg, jpeg'],
         ];
     }
     public function labels() {

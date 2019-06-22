@@ -1,6 +1,7 @@
 <?php
 namespace me\components;
 use Me;
+use me\helpers\Url;
 use me\exceptions\NotFound;
 use ReflectionMethod;
 class Action extends Component {
@@ -32,6 +33,9 @@ class Action extends Component {
      */
     public function run($params) {
         if (!$this->checkAccess()) {
+            if (Me::$app->getUser()->getIsGuest()) {
+                return $this->controller->redirect([Me::$app->loginRoute]);
+            }
             throw new NotFound('Access Denied!');
         }
         $method = new ReflectionMethod($this->controller, $this->actionMethod);

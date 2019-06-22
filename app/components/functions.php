@@ -94,7 +94,7 @@ class functions {
         return null;
     }
     public static function httpNotFound($msg = null) {
-        throw new \yii\web\NotFoundHttpException($msg ? $msg : Yii::t('app', 'The requested page does not exist.'));
+        throw new \me\exceptions\NotFound($msg ? $msg : \Me::t('site', 'The requested page does not exist.'));
     }
     public static function setSuccessFlash($message = null) {
         Yii::$app->session->setFlash('success', $message ? $message : Yii::t('app', 'Information saved.'));

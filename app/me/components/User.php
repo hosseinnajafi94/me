@@ -2,6 +2,7 @@
 namespace me\components;
 use Me;
 /**
+ * @property-read int $id
  * @property-read IdentityInterface $identity
  * @property-read bool $isGuest
  */
@@ -47,6 +48,9 @@ class User extends Component {
         return !$this->getIsGuest();
     }
     public function signout(bool $destroySession = true): bool {
+        if ($this->getIsGuest()) {
+            return true;
+        }
         $identity = $this->getIdentity();
         if ($identity !== null) {
             $this->switchIdentity(null);

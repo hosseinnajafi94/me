@@ -46,6 +46,10 @@ class Application extends Component {
     /**
      * @var string
      */
+    public $loginRoute       = 'site/default/login';
+    /**
+     * @var string
+     */
     public $layout           = 'admin';
     /**
      * @var array
@@ -127,6 +131,12 @@ class Application extends Component {
      * @return void
      */
     public function run() {
+        set_error_handler(function ($severity, $message, $file, $line) {
+//            $response       = Me::$app->response;
+//            $response->code = 500;
+//            $response->data = Me::$app->runAction(Me::$app->errorRoute, ['message' => '500 Internal Server Error']);
+//            $response->send();
+        });
         try {
             $response = $this->handleRequest();
             $response->send();
@@ -165,7 +175,7 @@ class Application extends Component {
                 }
             }
             else {
-                $data .= $this->runAction($this->errorAction, ['message' => '500 Internal Server Error']);
+                $data .= $this->runAction($this->errorRoute, ['message' => '500 Internal Server Error']);
             }
             $response       = $this->response;
             $response->code = 500;

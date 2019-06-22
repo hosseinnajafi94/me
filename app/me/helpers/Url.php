@@ -2,6 +2,9 @@
 namespace me\helpers;
 use Me;
 class Url extends Helper {
+    public static function home(): string {
+        
+    }
     public static function to(array $url = []): string {
         $path   = trim(ArrayHelper::Remove($url, 0), '/');
         $params = http_build_query($url);

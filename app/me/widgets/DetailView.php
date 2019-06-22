@@ -20,10 +20,10 @@ class DetailView extends Widget {
         foreach ($this->columns as $key => $id) {
             if (is_array($id)) {
                 $config              = ArrayHelper::Extend([
-                            'class' => 'me\widgets\Column',
-                            'temp'  => $this->model,
-                            'data'  => $this->model
-                                ], $id);
+                    'class' => 'me\widgets\Column',
+                    'temp'  => $this->model,
+                    'data'  => $this->model
+                ], $id);
                 $this->columns[$key] = Me::createObject($config);
             }
             else if (is_string($id)) {

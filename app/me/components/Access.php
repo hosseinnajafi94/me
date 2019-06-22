@@ -11,6 +11,9 @@ class Access extends Component {
      * @var AccessRule[]
      */
     public $rules = [];
+    /**
+     * 
+     */
     public function init() {
         parent::init();
         foreach ($this->rules as $i => $rule) {

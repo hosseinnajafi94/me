@@ -1,6 +1,9 @@
 <?php
 return [
     'components' => [
+        'user' => [
+            'identityClass' => 'app\modules\users\models\DAL\Users',
+        ],
         'urlManager' => [
             'map' => [
                 ''  => 'site/default/index',

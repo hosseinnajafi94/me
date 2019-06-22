@@ -1,0 +1,15 @@
+a.nav-link:after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    border-bottom: 2px solid #4280e7;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    width: 0;
+    transition: width .2s ease;
+}
+a.nav-link:hover:after {
+    width: 80%;
+}
