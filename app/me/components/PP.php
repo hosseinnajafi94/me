@@ -113,14 +113,14 @@ class PP {
         return $obj;
     }
     public static function buildAssign(array $params = []) {
-        $var = (new static)->build($params['var']['name'], $params['var']['params']);
+        $var  = (new static)->build($params['var']['name'], $params['var']['params']);
         $expr = (new static)->build($params['expr']['name'], $params['expr']['params']);
-        $obj = new \PhpParser\Node\Expr\Assign($var, $expr);
+        $obj  = new \PhpParser\Node\Expr\Assign($var, $expr);
         return $obj;
     }
     public static function buildStaticCall(array $params = []) {
         $class = (new static)->build($params['class']['name'], $params['class']['params']);
-        $obj = new \PhpParser\Node\Expr\StaticCall($class, $params['name']);
+        $obj   = new \PhpParser\Node\Expr\StaticCall($class, $params['name']);
         return $obj;
     }
     public static function buildName(array $params = []) {

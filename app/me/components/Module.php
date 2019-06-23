@@ -29,14 +29,6 @@ class Module extends Component {
      */
     private $_viewPath;
     /**
-     * @return string
-     */
-    private $_tFile;
-    /**
-     * @return array
-     */
-    private $_t;
-    /**
      * @param string $route
      * @return array|null
      */
@@ -74,49 +66,5 @@ class Module extends Component {
                     . 'views';
         }
         return $this->_viewPath;
-    }
-    /**
-     * @param string $file
-     * @return void
-     */
-    public function setTFile(string $file) {
-        $this->_tFile = $file;
-    }
-    /**
-     * @return string
-     */
-    public function getTFile() {
-        if ($this->_tFile === null) {
-            $this->_tFile = $this->getBasePath()
-                    . DIRECTORY_SEPARATOR
-                    . 'translations'
-                    . DIRECTORY_SEPARATOR
-                    . Me::$app->language
-                    . DIRECTORY_SEPARATOR
-                    . $this->id . '.php';
-        }
-        return $this->_tFile;
-    }
-    /**
-     * @param string $text
-     * @param array $replaces
-     * @return string
-     */
-    public function translate($text, $replaces = []) {
-        if ($this->_t === null && is_file($this->getTFile())) {
-            $this->_t = include $this->getTFile();
-        }
-        if (isset($this->_t[$text])) {
-            $text = $this->_t[$text];
-        }
-        if (!empty($replaces)) {
-            $search  = [];
-            $replace = array_values($replaces);
-            foreach ($replaces as $key => $value) {
-                $search[] = '{' . $key . '}';
-            }
-            $text = str_replace($search, $replace, $text);
-        }
-        return $text;
     }
 }

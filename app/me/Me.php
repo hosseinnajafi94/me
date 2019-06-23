@@ -101,9 +101,41 @@ class Me {
     /**
      * 
      */
-    public static function t($category, $message, $replace = []) {
-        $module = static::$app->getModule($category);
-        return $module->translate($message, $replace);
+    private static $translations = [];
+    public static function t($category, $message, $params = []) {
+        $app = static::$app;
+        if (!isset($app->translations[$category])) {
+            return static::formatText($message, $params);
+        }
+        if (!isset(static::$translations[$category])) {
+            $path = static::$app->translations[$category];
+            $lang = static::$app->language;
+            $file = "$path/$lang/$category.php";
+            if (!is_file($file)) {
+                return static::formatText($message, $params);
+            }
+            static::$translations[$category] = include $file;
+        }
+        $messages = static::$translations[$category];
+        if (!isset($messages[$message])) {
+            return static::formatText($message, $params);
+        }
+        return static::formatText($messages[$message], $params);
+    }
+    private static function formatText(string $text = null, $params = []) {
+        if ($text === null) {
+            return null;
+        }
+        if (empty($params)) {
+            return $text;
+        }
+        $search  = [];
+        $replace = array_values($params);
+        foreach ($params as $key => $value) {
+            $search[] = '{' . $key . '}';
+        }
+        $text = str_replace($search, $replace, $text);
+        return $text;
     }
 }
 //

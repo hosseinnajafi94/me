@@ -54,10 +54,10 @@ class Controller extends Component {
             $method = new ReflectionMethod($this, $methodName);
             if ($method->isPublic()) {
                 return Me::createObject([
-                    'class'        => Action::class,
-                    'id'           => $actionID,
-                    'controller'   => $this,
-                    'actionMethod' => $methodName
+                            'class'        => Action::class,
+                            'id'           => $actionID,
+                            'controller'   => $this,
+                            'actionMethod' => $methodName
                 ]);
             }
         }
@@ -68,7 +68,7 @@ class Controller extends Component {
      * @return string
      */
     public function view(array $items = []) {
-        $view = Me::$app->getView();
+        $view    = Me::$app->getView();
         $content = $view->renderFile($view->getViewFile(), $items);
         return $this->render($content);
     }

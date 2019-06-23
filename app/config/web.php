@@ -1,6 +1,11 @@
 <?php
+$db = include 'db.php';
+list($modules, $translations) = include 'modules.php';
 return [
-    'components' => [
+    'modules'      => $modules,
+    'translations' => $translations,
+    'components'   => [
+        'db'         => $db,
         'user'       => [
             'identityClass' => 'app\modules\users\models\DAL\Users',
         ],
@@ -12,7 +17,5 @@ return [
                 'signout' => 'users/auth/signout',
             ]
         ],
-        'db'         => include 'db.php',
     ],
-    'modules'    => include 'modules.php'
 ];

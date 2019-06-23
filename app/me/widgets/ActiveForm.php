@@ -49,9 +49,9 @@ class ActiveForm extends Widget {
     public function field(Model $model, string $attribute, array $options = []): ActiveField {
         ArrayHelper::AddIfNotExist($this->fieldConfig, 'class', $this->fieldClass);
         $config = ArrayHelper::Extend($this->fieldConfig, $options, [
-            'model'     => $model,
-            'attribute' => $attribute,
-            'form'      => $this,
+                    'model'     => $model,
+                    'attribute' => $attribute,
+                    'form'      => $this,
         ]);
         return Me::createObject($config);
     }

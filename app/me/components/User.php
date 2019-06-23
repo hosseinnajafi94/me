@@ -171,8 +171,8 @@ class User extends Component {
     private $_access = [];
     public function can($permissionName) {
         if (!isset($this->_access[$permissionName])) {
-            $userId = $this->getId();
-            $authManager = Me::$app->getAuthManager();
+            $userId                         = $this->getId();
+            $authManager                    = Me::$app->getAuthManager();
             $this->_access[$permissionName] = $authManager->checkAccess($userId, $permissionName);
         }
         return $this->_access[$permissionName];

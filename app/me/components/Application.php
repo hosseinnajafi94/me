@@ -24,6 +24,10 @@ class Application extends Component {
      */
     public $modules          = [];
     /**
+     * @var array
+     */
+    public $translations     = [];
+    /**
      * @var Module
      */
     public $module;
@@ -66,7 +70,7 @@ class Application extends Component {
         'assetManager' => [
             'class' => 'me\components\AssetManager',
         ],
-        'authManager' => [
+        'authManager'  => [
             'class' => 'me\rbac\AuthManager',
         ],
         'cookie'       => [
@@ -93,7 +97,7 @@ class Application extends Component {
         'user'         => [
             'class' => 'me\components\User',
         ],
-        'view'     => [
+        'view'         => [
             'class' => 'me\components\View',
         ],
     ];

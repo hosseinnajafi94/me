@@ -52,7 +52,7 @@ class GridView extends Widget {
         $this->pagination = $this->renderPagination();
     }
     public function __toString() {
-        return $this->table . "<br/>". $this->pagination;
+        return $this->table . "<br/>" . $this->pagination;
     }
     protected function renderTable() {
         $table = "\n";

@@ -10,7 +10,7 @@ class Access extends Component {
     /**
      * @var AccessRule[]
      */
-    public $rules = [];
+    public $rules      = [];
     /**
      * 
      */
@@ -27,7 +27,7 @@ class Access extends Component {
      * @return bool
      */
     public function allows(Action $action): bool {
-        $user = Me::$app->getUser();
+        $user    = Me::$app->getUser();
         $request = Me::$app->getRequest();
         foreach ($this->rules as $rule) {
             if ($rule->allows($action, $user, $request)) {

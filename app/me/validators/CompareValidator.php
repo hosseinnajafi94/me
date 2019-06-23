@@ -6,10 +6,10 @@ use me\components\Model;
 use me\components\View;
 use me\assets\ValidationAsset;
 class CompareValidator extends Validator {
-    const TYPE_STRING = 'string';
-    const TYPE_NUMBER = 'number';
-    public $type      = self::TYPE_STRING;
-    public $operator  = '==';
+    const TYPE_STRING      = 'string';
+    const TYPE_NUMBER      = 'number';
+    public $type     = self::TYPE_STRING;
+    public $operator = '==';
     public $compareAttribute;
     public $message;
     public function init() {
@@ -82,9 +82,9 @@ class CompareValidator extends Validator {
         return null;
     }
     public function clientValidateAttribute(Model $model, string $attribute, View $view): string {
-        $attributeLabel        = $model->attributeLabel($attribute);
-        $compareAttributeLabel = $model->attributeLabel($this->compareAttribute);
-        $compareAttribute      = $this->compareAttribute;
+        $attributeLabel              = $model->attributeLabel($attribute);
+        $compareAttributeLabel       = $model->attributeLabel($this->compareAttribute);
+        $compareAttribute            = $this->compareAttribute;
         $options                     = [];
         $options['type']             = $this->type;
         $options['operator']         = $this->operator;

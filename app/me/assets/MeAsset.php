@@ -2,8 +2,8 @@
 namespace me\assets;
 use me\components\AssetBundle;
 class MeAsset extends AssetBundle {
-    public $web = '@web/assets/me';
-    public $js = [
+    public $web     = '@web/assets/me';
+    public $js      = [
         'me.js'
     ];
     public $depends = [

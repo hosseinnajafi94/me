@@ -124,7 +124,7 @@ class AuthManager extends Component {
      * @return bool
      */
     public function add(int $userId, int $itemId): bool {
-        $command = Me::$app->getDb()->createCommand();
+        $command      = Me::$app->getDb()->createCommand();
         $command->insert($this->assignmentTable, ['item_id' => $itemId, 'user_id' => $userId]);
         $affectedRows = $command->execute();
         return $affectedRows > 0;

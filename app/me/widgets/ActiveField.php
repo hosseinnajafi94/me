@@ -179,7 +179,7 @@ class ActiveField extends Component {
                 break;
             }
         }
-        $this->parts['{input}']         = Html::activeFileInput($this->model, $this->attribute, $options);
+        $this->parts['{input}'] = Html::activeFileInput($this->model, $this->attribute, $options);
         return $this;
     }
     /**
@@ -273,7 +273,7 @@ class ActiveField extends Component {
         $options['name']      = $attribute;
         $options['container'] = ".field-$inputID";
         $options['input']     = "#$inputID";
-        $options['validate'] = new JsExpression('function (attribute, value, messages, $form) {' . implode('', $validators) . '}');
+        $options['validate']  = new JsExpression('function (attribute, value, messages, $form) {' . implode('', $validators) . '}');
         return $options;
     }
 }

@@ -51,10 +51,10 @@ class FileValidator extends Validator {
     }
     public function validateValue(Model $model, string $attribute): array {
         /* @var $uploader UploadedFile */
-        $value    = $model->$attribute;
+        $value             = $model->$attribute;
         $model->$attribute = null;
-        $multiple = ($this->maxFiles != 1 || $this->minFiles > 1);
-        $uploader = Me::createObject(['class' => UploadedFile::class, 'file' => $value, 'multiple' => $multiple]);
+        $multiple          = ($this->maxFiles != 1 || $this->minFiles > 1);
+        $uploader          = Me::createObject(['class' => UploadedFile::class, 'file' => $value, 'multiple' => $multiple]);
         if ($uploader->multiple) {
             foreach ($uploader->name as $index => $name) {
                 if ($this->isEmpty($name)) {

@@ -43,7 +43,7 @@ class NumberValidator extends Validator {
         return [];
     }
     public function clientValidateAttribute(Model $model, string $attribute, View $view): string {
-        $label = $model->attributeLabel($attribute);
+        $label   = $model->attributeLabel($attribute);
         $options = [
             'pattern' => new JsExpression($this->integerOnly ? $this->integerPattern : $this->numberPattern),
             'message' => $this->formatMessage($this->message, [
@@ -51,17 +51,17 @@ class NumberValidator extends Validator {
             ]),
         ];
         if ($this->min !== null) {
-            $options['min'] = is_string($this->min) ? (float) $this->min : $this->min;
+            $options['min']      = is_string($this->min) ? (float) $this->min : $this->min;
             $options['tooSmall'] = $this->formatMessage($this->tooSmall, [
                 'attribute' => $label,
-                'min' => $this->min,
+                'min'       => $this->min,
             ]);
         }
         if ($this->max !== null) {
-            $options['max'] = is_string($this->max) ? (float) $this->max : $this->max;
+            $options['max']    = is_string($this->max) ? (float) $this->max : $this->max;
             $options['tooBig'] = $this->formatMessage($this->tooBig, [
                 'attribute' => $label,
-                'max' => $this->max,
+                'max'       => $this->max,
             ]);
         }
         ValidationAsset::register($view);

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50711
 File Encoding         : 65001
 
-Date: 2019-06-18 21:21:42
+Date: 2019-06-23 11:21:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,7 +31,7 @@ INDEX `user_id` (`user_id`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_persian_ci
-AUTO_INCREMENT=2
+AUTO_INCREMENT=4
 
 ;
 
@@ -39,7 +39,7 @@ AUTO_INCREMENT=2
 -- Records of auth_assignment
 -- ----------------------------
 BEGIN;
-INSERT INTO `auth_assignment` VALUES ('1', '1', '1');
+INSERT INTO `auth_assignment` VALUES ('1', '1', '1'), ('2', '2', '2'), ('3', '2', '3');
 COMMIT;
 
 -- ----------------------------
@@ -54,7 +54,7 @@ PRIMARY KEY (`id`)
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_persian_ci
-AUTO_INCREMENT=4
+AUTO_INCREMENT=6
 
 ;
 
@@ -62,7 +62,7 @@ AUTO_INCREMENT=4
 -- Records of auth_item
 -- ----------------------------
 BEGIN;
-INSERT INTO `auth_item` VALUES ('1', 'admin', '1'), ('2', 'user', '1'), ('3', 'userManagment', '2');
+INSERT INTO `auth_item` VALUES ('1', 'admin', '1'), ('2', 'user', '1'), ('3', 'userManagment', '2'), ('4', 'profile', '2'), ('5', 'dashboard', '2');
 COMMIT;
 
 -- ----------------------------
@@ -81,7 +81,7 @@ INDEX `child_id` (`child_id`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_persian_ci
-AUTO_INCREMENT=3
+AUTO_INCREMENT=5
 
 ;
 
@@ -89,7 +89,7 @@ AUTO_INCREMENT=3
 -- Records of auth_item_child
 -- ----------------------------
 BEGIN;
-INSERT INTO `auth_item_child` VALUES ('1', '1', '2'), ('2', '2', '3');
+INSERT INTO `auth_item_child` VALUES ('1', '1', '2'), ('2', '1', '3'), ('3', '2', '4'), ('4', '2', '5');
 COMMIT;
 
 -- ----------------------------
@@ -98,15 +98,15 @@ COMMIT;
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
 `id`  int(11) NOT NULL AUTO_INCREMENT ,
+`fullname`  varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL ,
 `username`  varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL ,
 `password`  varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL ,
-`fullname`  varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL ,
-`avatar`  varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci NOT NULL ,
+`avatar`  varchar(255) CHARACTER SET utf8 COLLATE utf8_persian_ci NULL DEFAULT NULL ,
 PRIMARY KEY (`id`)
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_persian_ci
-AUTO_INCREMENT=37
+AUTO_INCREMENT=4
 
 ;
 
@@ -114,25 +114,25 @@ AUTO_INCREMENT=37
 -- Records of users
 -- ----------------------------
 BEGIN;
-INSERT INTO `users` VALUES ('1', 'superadmin', '17c4520f6cfd1ab53d8745e84681eb49', 'حسین نجفی', 'default.png'), ('20', 'a', 'b', 'c', 'default.png'), ('21', '111', '222', '333', 'default.png'), ('22', '111', '222', '333', 'default.png'), ('23', '111', '222', '333', 'default.png'), ('24', '111', '222', '333', 'default.png'), ('25', '111', '222', '333', 'default.png'), ('27', 'asd', '1', '2', 'default.png'), ('28', 'asd', '1', '2', 'default.png'), ('29', 'asd1', 'a67995ad3ec084cb38d32725fd73d9a3', 'asd3', 'default.png'), ('30', 'asd1', 'asd2', '22', 'default.png'), ('31', '1', '1', '1', 'default.png'), ('32', '3', '3', '3', 'default.png'), ('33', 'sda', 'asd', 'asd', 'default.png'), ('34', '', '', '', 'default.png'), ('35', '111111', '222222', '333333', 'default.png'), ('36', '111111', '222222', '333333', 'default.png');
+INSERT INTO `users` VALUES ('1', 'حسین نجفی', 'superadmin', '17c4520f6cfd1ab53d8745e84681eb49', 'default.png'), ('2', 'superadmin3', 'superadmin1', '2a43bf7ab34cd6bf5401343115eaf325', 'default.png'), ('3', 'superadmin2', 'superadmin2', '2a43bf7ab34cd6bf5401343115eaf325', 'default.png');
 COMMIT;
 
 -- ----------------------------
 -- Auto increment value for auth_assignment
 -- ----------------------------
-ALTER TABLE `auth_assignment` AUTO_INCREMENT=2;
+ALTER TABLE `auth_assignment` AUTO_INCREMENT=4;
 
 -- ----------------------------
 -- Auto increment value for auth_item
 -- ----------------------------
-ALTER TABLE `auth_item` AUTO_INCREMENT=4;
+ALTER TABLE `auth_item` AUTO_INCREMENT=6;
 
 -- ----------------------------
 -- Auto increment value for auth_item_child
 -- ----------------------------
-ALTER TABLE `auth_item_child` AUTO_INCREMENT=3;
+ALTER TABLE `auth_item_child` AUTO_INCREMENT=5;
 
 -- ----------------------------
 -- Auto increment value for users
 -- ----------------------------
-ALTER TABLE `users` AUTO_INCREMENT=37;
+ALTER TABLE `users` AUTO_INCREMENT=4;
